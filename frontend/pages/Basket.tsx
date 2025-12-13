@@ -135,7 +135,7 @@ export function Basket() {
                     <p
                       className={`text-p-price ${isInStock ? "text-black" : "text-blue"} font-bold`}
                     >
-                      {formatPrice(totalPrice)} ₽
+                      {formatPrice(totalPrice)} {offer.currency}
                     </p>
                     <p className="text-xs text-gray mt-1 whitespace-nowrap">
                       {item.quantity} x {formatPrice(unitPrice)}

@@ -21,7 +21,9 @@ export function useProductQuantity({ product }: UseProductQuantityOptions) {
         minimumFractionDigits: 1,
         maximumFractionDigits: 1,
       }) +
-      " Р/" +
+      " " +
+      offer.currency +
+      "/" +
       offer.unit
     : "-"
 
