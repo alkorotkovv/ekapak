@@ -62,7 +62,7 @@ export function Product({ uuid }: ProductProps) {
   const productImages = data?.images || []
 
   return (
-    <div className="flex flex-1 max-w-container mx-auto w-full pt-4 lg:pt-8 px-2 lg:px-0">
+    <div className="flex flex-1 max-w-container mx-auto w-full">
       <main className="flex-1 w-full">
         <Breadcrumbs categoryUuid={categoryFromUrl || data?.category_uuid} />
         <div className="bg-white rounded-lg shadow-sm p-6 lg:p-8">

@@ -43,7 +43,7 @@ export function Breadcrumbs({ categoryUuid, productName, pageName }: Breadcrumbs
   }
 
   return (
-    <nav className="flex items-center gap-2 text-sm text-gray m-1 lg:m-2">
+    <nav className="flex items-center gap-2 text-xs lg:text-sm text-gray my-1 mx-4">
       {items.map((item, index) => (
         <div key={index} className="flex items-center gap-2">
           {index > 0 && <span className="text-lightgray">/</span>}
