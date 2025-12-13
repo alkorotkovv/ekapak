@@ -2,7 +2,7 @@
 
 import { useProduct } from "@/hooks/useProducts"
 import { useAppDispatch } from "@/store/hooks"
-import { addToCart } from "@/store/slices/cartSlice"
+import { addToBasket } from "@/store/slices/basketSlice"
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { QuantitySelector } from "@/components/QuantitySelector"
@@ -48,11 +48,11 @@ export function Product({ uuid }: ProductProps) {
   // Определяем статус наличия
   const isInStock = data?.["Наличие"] === "Да в наличии" ? true : false
 
-  const handleAddToCart = () => {
+  const handleAddToBasket = () => {
     if (primaryOffer && data) {
       // Добавляем указанное количество
       for (let i = 0; i < quantity; i++) {
-        dispatch(addToCart({ product: data, offer: primaryOffer }))
+        dispatch(addToBasket({ product: data, offer: primaryOffer }))
       }
       setQuantity(1) // Сбрасываем после добавления
     }
@@ -205,9 +205,15 @@ export function Product({ uuid }: ProductProps) {
                     offer={primaryOffer}
                     quantity={quantity}
                     onQuantityChange={handleQuantityChange}
-                    onAddToCart={handleAddToCart}
                     disabled={!primaryOffer || !primaryOffer.quantity}
                   />
+                  <button
+                    onClick={handleAddToBasket}
+                    disabled={!primaryOffer || !primaryOffer.quantity}
+                    className="w-full px-4 py-3 bg-blue text-white rounded-lg text-sm font-medium transition-colors hover:bg-lightblue disabled:bg-lightgray disabled:cursor-not-allowed mt-2"
+                  >
+                    Добавить в корзину
+                  </button>
                 </div>
               )}
             </div>

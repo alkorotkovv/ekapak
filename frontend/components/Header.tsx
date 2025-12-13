@@ -3,9 +3,13 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useAppSelector } from "@/store/hooks"
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("")
+  const basketItemsCount = useAppSelector(state =>
+    state.basket.items.reduce((sum, item) => sum + item.quantity, 0)
+  )
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -116,16 +120,18 @@ export function Header() {
 
               <Link
                 href="/basket"
-                className="flex flex-col items-center justify-between h-10 hover:opacity-70 transition-opacity"
+                className="flex flex-col items-center justify-between h-10 hover:opacity-70 transition-opacity relative"
               >
-                <Image src="/assets/icons/cart.png" alt="Cart" width={17} height={15} />
+                <div className="relative">
+                  <Image src="/assets/icons/basket.png" alt="Basket" width={17} height={15} />
+                  {basketItemsCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-blue text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {basketItemsCount > 99 ? "99+" : basketItemsCount}
+                    </span>
+                  )}
+                </div>
                 <span className="text-xs text-black">Корзина</span>
               </Link>
-
-              {/* Корзина */}
-              {/* <div className="flex flex-col items-center gap-1">
-                <MiniCart />
-              </div> */}
             </div>
 
             {/* Кнопка "Заказать образец" */}

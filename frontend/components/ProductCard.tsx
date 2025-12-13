@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Product } from "@/types"
 import { useAppDispatch } from "@/store/hooks"
-import { addToCart } from "@/store/slices/cartSlice"
+import { addToBasket } from "@/store/slices/basketSlice"
 import { useState } from "react"
 import { QuantitySelector } from "./QuantitySelector"
 
@@ -37,11 +37,11 @@ export function ProductCard({ product, selectedCategory }: ProductCardProps) {
       primaryOffer.unit
     : "-"
 
-  const handleAddToCart = () => {
+  const handleAddToBasket = () => {
     if (primaryOffer) {
       // Добавляем указанное количество
       for (let i = 0; i < quantity; i++) {
-        dispatch(addToCart({ product, offer: primaryOffer }))
+        dispatch(addToBasket({ product, offer: primaryOffer }))
       }
       setQuantity(1) // Сбрасываем после добавления
     }
@@ -100,13 +100,20 @@ export function ProductCard({ product, selectedCategory }: ProductCardProps) {
 
         {/* Качель с плюсом/минусом и кнопка добавить в корзину */}
         {primaryOffer && (
-          <QuantitySelector
-            offer={primaryOffer}
-            quantity={quantity}
-            onQuantityChange={handleQuantityChange}
-            onAddToCart={handleAddToCart}
-            disabled={false}
-          />
+          <>
+            <QuantitySelector
+              offer={primaryOffer}
+              quantity={quantity}
+              onQuantityChange={handleQuantityChange}
+              disabled={false}
+            />
+            <button
+              onClick={handleAddToBasket}
+              className="w-full px-4 py-3 bg-blue text-white rounded-lg text-sm font-medium transition-colors hover:bg-lightblue disabled:bg-lightgray disabled:cursor-not-allowed"
+            >
+              Добавить в корзину
+            </button>
+          </>
         )}
       </div>
     </div>

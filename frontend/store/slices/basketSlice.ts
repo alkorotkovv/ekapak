@@ -1,27 +1,27 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import type { Product, Offer } from "@/types"
 
-export interface CartItem {
+export interface BasketItem {
   product: Product
   offer: Offer
   quantity: number
 }
 
-interface CartState {
-  items: CartItem[]
+interface BasketState {
+  items: BasketItem[]
   total: number
 }
 
-const initialState: CartState = {
+const initialState: BasketState = {
   items: [],
   total: 0,
 }
 
-const cartSlice = createSlice({
-  name: "cart",
+const basketSlice = createSlice({
+  name: "basket",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<{ product: Product; offer: Offer }>) => {
+    addToBasket: (state, action: PayloadAction<{ product: Product; offer: Offer }>) => {
       const { product, offer } = action.payload
       const existingItem = state.items.find(
         item => item.product.uuid === product.uuid && item.offer.uuid === offer.uuid
@@ -38,7 +38,10 @@ const cartSlice = createSlice({
         0
       )
     },
-    removeFromCart: (state, action: PayloadAction<{ productUuid: string; offerUuid: string }>) => {
+    removeFromBasket: (
+      state,
+      action: PayloadAction<{ productUuid: string; offerUuid: string }>
+    ) => {
       state.items = state.items.filter(
         item =>
           !(
@@ -81,12 +84,12 @@ const cartSlice = createSlice({
         0
       )
     },
-    clearCart: state => {
+    clearBasket: state => {
       state.items = []
       state.total = 0
     },
   },
 })
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart } = cartSlice.actions
-export default cartSlice.reducer
+export const { addToBasket, removeFromBasket, updateQuantity, clearBasket } = basketSlice.actions
+export default basketSlice.reducer
