@@ -4,7 +4,7 @@ import { addToBasket } from "@/store/slices/basketSlice"
 import { Product } from "@/types"
 
 interface UseProductQuantityOptions {
-  product: Product | null
+  product: Product
 }
 
 // hook для взаимодействия с товаром
@@ -28,7 +28,7 @@ export function useProductQuantity({ product }: UseProductQuantityOptions) {
     : "-"
 
   const handleAddToBasket = () => {
-    if (product && offer) {
+    if (offer) {
       dispatch(addToBasket({ product, quantity }))
       setQuantity(1) // Сбрасываем после добавления
     }

@@ -44,7 +44,7 @@ export function Catalog() {
   }, [data, currentPage])
 
   return (
-    <div className="flex flex-1 gap-8 max-w-container mx-auto w-full lg:flex-row flex-col pt-8">
+    <div className="flex flex-1 gap-8 max-w-container mx-auto w-full lg:flex-row flex-col">
       <div className="w-category-sidebar flex-shrink-0 lg:w-category-sidebar w-full">
         <Categories selectedCategory={selectedCategory} onCategorySelect={handleCategorySelect} />
       </div>

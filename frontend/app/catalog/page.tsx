@@ -7,7 +7,6 @@ export default async function CatalogPage() {
   const queryClient = new QueryClient()
 
   // Prefetch товары на сервере для SSR
-  // Категории загружаются на клиенте через useCategories hook
   await queryClient.prefetchQuery({
     queryKey: ["products", undefined],
     queryFn: () => fetchProducts(),

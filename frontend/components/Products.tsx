@@ -15,7 +15,7 @@ export function Products({ products, selectedCategory }: ProductsProps) {
 
   return (
     <div className="max-w-products mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px]">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-[10px]">
         {products.map(product => (
           <ProductCard key={product.uuid} product={product} selectedCategory={selectedCategory} />
         ))}

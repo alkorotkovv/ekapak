@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru" className={manrope.variable}>
       <body className="font-manrope">
         <Providers>
-          <div className="min-h-screen flex flex-col bg-background">
+          <div className="min-h-screen flex flex-col items-center bg-background">
             <Header />
             {children}
           </div>
