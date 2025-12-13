@@ -1,0 +1,93 @@
+"use client"
+
+import { useState, useMemo } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { useProducts } from "@/hooks/useProducts"
+import { Products } from "@/components/Products"
+import { Categories } from "@/components/Categories"
+import { Pagination } from "antd"
+
+const ITEMS_PER_PAGE = 8
+
+export function Catalog() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  // Получаем категорию только из URL - это единственный источник истины
+  const selectedCategory = searchParams?.get("category") || undefined
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const { data, isLoading, error } = useProducts(selectedCategory)
+
+  // Сбрасываем страницу при смене категории
+  const handleCategorySelect = (categoryUuid: string | undefined) => {
+    // Если категория не изменилась, ничего не делаем
+    if (categoryUuid === selectedCategory) {
+      return
+    }
+
+    setCurrentPage(1)
+
+    // Обновляем URL - React Query автоматически сделает новый запрос при изменении queryKey
+    const params = new URLSearchParams(searchParams?.toString() || "")
+    if (categoryUuid) {
+      params.set("category", categoryUuid)
+    } else {
+      params.delete("category")
+    }
+    const newUrl = params.toString() ? `/catalog?${params.toString()}` : "/catalog"
+    router.push(newUrl, { scroll: false })
+  }
+
+  // Вычисляем товары для текущей страницы
+  const paginatedProducts = useMemo(() => {
+    if (!data?.data) return []
+
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    return data.data.slice(startIndex, endIndex)
+  }, [data?.data, currentPage])
+
+  // Вычисляем общее количество страниц
+  const totalPages = useMemo(() => {
+    if (!data?.data) return 0
+    return Math.ceil(data.data.length / ITEMS_PER_PAGE)
+  }, [data?.data])
+
+  return (
+    <div className="flex flex-1 gap-8 max-w-container mx-auto w-full lg:flex-row flex-col pt-8">
+      <div className="w-category-sidebar flex-shrink-0 lg:w-category-sidebar w-full">
+        <Categories selectedCategory={selectedCategory} onCategorySelect={handleCategorySelect} />
+      </div>
+
+      <main className="flex-1 min-w-0">
+        {isLoading && <div className="py-8 text-center text-p text-gray">Загрузка...</div>}
+        {error && (
+          <div className="py-8 text-center text-p text-red-600">Ошибка загрузки данных</div>
+        )}
+
+        {data && data.data && (
+          <>
+            <Products products={paginatedProducts} selectedCategory={selectedCategory} />
+
+            {/* Пагинация - показываем всегда, если товаров больше 0 */}
+            {data.data.length > 0 && (
+              <div className="my-8 flex flex-col items-center gap-4">
+                <Pagination
+                  current={currentPage}
+                  total={data.data.length}
+                  pageSize={ITEMS_PER_PAGE}
+                  onChange={page => setCurrentPage(page)}
+                  showSizeChanger={false}
+                  showTotal={(total, range) =>
+                    `Показано ${range[0]}-${range[1]} из ${total} товаров`
+                  }
+                />
+              </div>
+            )}
+          </>
+        )}
+      </main>
+    </div>
+  )
+}
