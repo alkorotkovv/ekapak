@@ -8,6 +8,6 @@ export const useCategories = () => {
   return useQuery<Category[]>({
     queryKey: ["categories"],
     queryFn: () => fetchCategories(),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   })
 }

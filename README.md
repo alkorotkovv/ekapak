@@ -1,4 +1,4 @@
-# Eco Frontend
+# Екапак Frontend
 
 Frontend приложение на Next.js с Redux и React Query.
 
@@ -24,4 +24,3 @@ npm run dev
 - `hooks/` - кастомные хуки (включая React Query hooks)
 - `types/` - TypeScript типы
 - `utils/` - утилиты и вспомогательные функции
-

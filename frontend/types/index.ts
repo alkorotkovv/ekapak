@@ -2,19 +2,15 @@ export interface Category {
   uuid: string
   name: string
   slug: string
-  description: any
-  parents?: Category[] | null
   children?: Category[] | null
-  created_at?: string
-  updated_at?: string
 }
 
-export interface ProductImage {
+interface ProductImage {
   original_url: string
   card_url: string
 }
 
-export interface Offer {
+interface Offer {
   uuid: string
   price: string
   currency: string
@@ -36,8 +32,6 @@ export interface Product {
   Наличие?: string
   "Мин. покупка, шт."?: string
   seo_description?: string
-  created_at?: string
-  updated_at?: string
 }
 
 export interface ProductsResponse {

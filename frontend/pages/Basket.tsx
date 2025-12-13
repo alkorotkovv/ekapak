@@ -21,7 +21,7 @@ export function Basket() {
     dispatch(updateQuantity({ productUuid, quantity: newQuantity }))
   }
 
-  const handleCheckout = () => {
+  const handleCreateOrder = () => {
     // Кнопка ничего не делает
   }
 
@@ -222,7 +222,7 @@ export function Basket() {
                   </span>
                 </div>
                 <button
-                  onClick={handleCheckout}
+                  onClick={handleCreateOrder}
                   className="w-full py-3 lg:py-4 bg-blue text-white rounded-lg hover:bg-opacity-90 transition-colors font-medium text-sm lg:text-base"
                 >
                   Оформить заказ

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useAppSelector, useAppDispatch } from "@/store/hooks"
@@ -16,22 +16,19 @@ export function Header() {
     state.basket.items.reduce((sum, item) => sum + item.quantity, 0)
   )
 
+  // Создаем debounced функцию один раз через useRef
+  const debouncedSetSearchQueryRef = useRef(
+    debounce((query: string) => dispatch(setSearchQuery(query)), 300)
+  )
+
   // Синхронизируем локальное состояние с Redux при изменении извне
   useEffect(() => {
     setLocalSearchQuery(searchQuery)
   }, [searchQuery])
 
-  // Создаем debounced функцию для обновления поискового запроса в Redux
-  const debouncedSetSearchQuery = useMemo(
-    () => debounce((query: string) => dispatch(setSearchQuery(query)), 300),
-    [dispatch]
-  )
-
   const handleSearchChange = (value: string) => {
-    // Обновляем локальное состояние сразу для отзывчивости UI
     setLocalSearchQuery(value)
-    // Debounced обновление Redux для фильтрации (выполнится через 300ms после последнего ввода)
-    debouncedSetSearchQuery(value)
+    debouncedSetSearchQueryRef.current(value)
   }
 
   return (

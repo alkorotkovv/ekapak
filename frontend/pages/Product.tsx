@@ -76,7 +76,7 @@ export function Product({ uuid }: ProductProps) {
                       <div key={index} className="relative w-full h-64 md:h-80">
                         <Image
                           src={image.original_url}
-                          alt={`${productName} - изображение ${index + 1}`}
+                          alt={productName}
                           fill
                           className="object-contain rounded-lg"
                           sizes="(max-width: 768px) 100vw, 400px"
