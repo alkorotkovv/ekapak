@@ -3,10 +3,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Product } from "@/types"
-import { useAppDispatch } from "@/store/hooks"
-import { addToBasket } from "@/store/slices/basketSlice"
-import { useState } from "react"
 import { QuantitySelector } from "./QuantitySelector"
+import { useProductQuantity } from "@/hooks/useProductQuantity"
 
 interface ProductCardProps {
   product: Product
@@ -14,47 +12,14 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, selectedCategory }: ProductCardProps) {
-  const dispatch = useAppDispatch()
-  const [quantity, setQuantity] = useState(1)
-
-  // Получаем первый оффер
-  const primaryOffer = product.offers && product.offers.length > 0 ? product.offers[0] : null
+  const { quantity, offer, priceText, handleAddToBasket, handleQuantityChange } =
+    useProductQuantity({ product })
 
   // Получаем первое изображение
-  const productImage =
-    product.images && product.images.length > 0 ? product.images[0].card_url : null
+  const productImage = product.images?.[0].card_url ?? null
 
   // Определяем статус наличия
   const isInStock = product["Наличие"] === "Да в наличии" ? true : false
-
-  //Формируем строку цены
-  const priceText = primaryOffer
-    ? parseFloat(primaryOffer.price).toLocaleString("ru-RU", {
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1,
-      }) +
-      " Р/" +
-      primaryOffer.unit
-    : "-"
-
-  const handleAddToBasket = () => {
-    if (primaryOffer) {
-      // Добавляем указанное количество
-      for (let i = 0; i < quantity; i++) {
-        dispatch(addToBasket({ product, offer: primaryOffer }))
-      }
-      setQuantity(1) // Сбрасываем после добавления
-    }
-  }
-
-  const handleQuantityChange = (delta: number) => {
-    const newQuantity = Math.max(1, quantity + delta)
-    if (primaryOffer && primaryOffer.quantity > 0) {
-      setQuantity(Math.min(newQuantity, primaryOffer.quantity))
-    } else {
-      setQuantity(newQuantity)
-    }
-  }
 
   // Формируем URL с категорией, если она выбрана
   const productUrl = selectedCategory
@@ -99,10 +64,12 @@ export function ProductCard({ product, selectedCategory }: ProductCardProps) {
         </div>
 
         {/* Качель с плюсом/минусом и кнопка добавить в корзину */}
-        {primaryOffer && (
+        {offer && (
           <>
             <QuantitySelector
-              offer={primaryOffer}
+              price={offer.price}
+              currency={offer.currency}
+              unit={offer.unit}
               quantity={quantity}
               onQuantityChange={handleQuantityChange}
               disabled={false}

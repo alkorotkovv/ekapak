@@ -1,13 +1,11 @@
 "use client"
 
 import { useProduct } from "@/hooks/useProducts"
-import { useAppDispatch } from "@/store/hooks"
-import { addToBasket } from "@/store/slices/basketSlice"
-import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { QuantitySelector } from "@/components/QuantitySelector"
 import { Carousel } from "antd"
 import Image from "next/image"
+import { useProductQuantity } from "@/hooks/useProductQuantity"
 
 interface ProductProps {
   uuid: string
@@ -15,68 +13,25 @@ interface ProductProps {
 
 export function Product({ uuid }: ProductProps) {
   const { data, isLoading, error } = useProduct(uuid)
-  const dispatch = useAppDispatch()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [quantity, setQuantity] = useState(1)
 
-  // Получаем категорию из URL - это правильный способ сохранять состояние в Next.js
-  // Категория передается через URL параметр при клике на товар из каталога
+  const { quantity, offer, priceText, handleAddToBasket, handleQuantityChange } =
+    useProductQuantity({ product: data ?? null })
+
   const categoryFromUrl = searchParams?.get("category") || undefined
 
-  // Функция для возврата на каталог с сохранением категории
-  // Если категория есть в URL - возвращаемся на каталог с этой категорией
-  // Если нет - просто возвращаемся назад (router.back()) или на каталог без фильтра
   const handleBack = () => {
     if (categoryFromUrl) {
       // Если категория есть в URL - возвращаемся на каталог с сохранением категории
       router.push(`/catalog?category=${categoryFromUrl}`)
     } else {
-      // Если категории нет - пытаемся вернуться назад, иначе на каталог
-      // router.back() вернет на предыдущую страницу (каталог, если оттуда пришли)
-      if (typeof window !== "undefined" && window.history.length > 1) {
-        router.back()
-      } else {
-        router.push("/catalog")
-      }
+      router.push("/catalog")
     }
   }
-
-  // Получаем первый оффер
-  const primaryOffer = data?.offers && data.offers.length > 0 ? data.offers[0] : null
 
   // Определяем статус наличия
   const isInStock = data?.["Наличие"] === "Да в наличии" ? true : false
-
-  const handleAddToBasket = () => {
-    if (primaryOffer && data) {
-      // Добавляем указанное количество
-      for (let i = 0; i < quantity; i++) {
-        dispatch(addToBasket({ product: data, offer: primaryOffer }))
-      }
-      setQuantity(1) // Сбрасываем после добавления
-    }
-  }
-
-  const handleQuantityChange = (delta: number) => {
-    const newQuantity = Math.max(1, quantity + delta)
-    if (primaryOffer && primaryOffer.quantity > 0) {
-      setQuantity(Math.min(newQuantity, primaryOffer.quantity))
-    } else {
-      setQuantity(newQuantity)
-    }
-  }
-
-  const priceText = primaryOffer
-    ? parseFloat(primaryOffer.price).toLocaleString("ru-RU", {
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1,
-      }) +
-      " Р/" +
-      primaryOffer.unit
-    : "Цена не указана"
-
-  console.log("Product component state:", { data, isLoading, error, uuid })
 
   if (isLoading) {
     return (
@@ -89,7 +44,6 @@ export function Product({ uuid }: ProductProps) {
   }
 
   if (error) {
-    console.error("Product error:", error)
     return (
       <div className="flex flex-1 max-w-container mx-auto w-full pt-8">
         <main className="flex-1">
@@ -102,7 +56,6 @@ export function Product({ uuid }: ProductProps) {
   }
 
   if (!data) {
-    console.warn("Product data is null or undefined")
     return (
       <div className="flex flex-1 max-w-container mx-auto w-full pt-8">
         <main className="flex-1">
@@ -111,8 +64,6 @@ export function Product({ uuid }: ProductProps) {
       </div>
     )
   }
-
-  console.log("Rendering product with data:", data.name, data.description)
 
   // Принудительно рендерим, даже если что-то не так
   const productName = data?.name || "Без названия"
@@ -126,17 +77,9 @@ export function Product({ uuid }: ProductProps) {
         <div className="mb-4">
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 text-p text-black hover:text-blue transition-colors"
+            className="flex px-2 text-blue hover:text-lightblue transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            <span>Назад</span>
+            Назад
           </button>
         </div>
 
@@ -162,8 +105,7 @@ export function Product({ uuid }: ProductProps) {
                 ) : (
                   <div className="w-full h-64 md:h-80 bg-lightgray bg-opacity-30 rounded-lg flex items-center justify-center">
                     <div className="text-gray text-center">
-                      <p className="text-p mb-2">Нет изображения</p>
-                      <p className="text-p-description">Изображение товара отсутствует</p>
+                      <p className="text-p">Нет изображения</p>
                     </div>
                   </div>
                 )}
@@ -199,17 +141,19 @@ export function Product({ uuid }: ProductProps) {
               </div>
 
               {/* Качелька и кнопка добавить в корзину */}
-              {primaryOffer && (
+              {offer && (
                 <div className="mt-auto">
                   <QuantitySelector
-                    offer={primaryOffer}
+                    price={offer.price}
+                    currency={offer.currency}
+                    unit={offer.unit}
                     quantity={quantity}
                     onQuantityChange={handleQuantityChange}
-                    disabled={!primaryOffer || !primaryOffer.quantity}
+                    disabled={!offer || !offer.quantity}
                   />
                   <button
                     onClick={handleAddToBasket}
-                    disabled={!primaryOffer || !primaryOffer.quantity}
+                    disabled={!offer || !offer.quantity}
                     className="w-full px-4 py-3 bg-blue text-white rounded-lg text-sm font-medium transition-colors hover:bg-lightblue disabled:bg-lightgray disabled:cursor-not-allowed mt-2"
                   >
                     Добавить в корзину

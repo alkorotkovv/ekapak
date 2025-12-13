@@ -1,0 +1,51 @@
+import { useState } from "react"
+import { useAppDispatch } from "@/store/hooks"
+import { addToBasket } from "@/store/slices/basketSlice"
+import { Product } from "@/types"
+
+interface UseProductQuantityOptions {
+  product: Product | null
+}
+
+// hook для взаимодействия с товаром
+export function useProductQuantity({ product }: UseProductQuantityOptions) {
+  const dispatch = useAppDispatch()
+  const [quantity, setQuantity] = useState(1)
+
+  // Получаем первый оффер
+  const offer = product?.offers?.[0] ?? null
+
+  // Формируем строку цены
+  const priceText = offer
+    ? parseFloat(offer.price).toLocaleString("ru-RU", {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      }) +
+      " Р/" +
+      offer.unit
+    : "-"
+
+  const handleAddToBasket = () => {
+    if (product && offer) {
+      dispatch(addToBasket({ product, quantity }))
+      setQuantity(1) // Сбрасываем после добавления
+    }
+  }
+
+  const handleQuantityChange = (delta: number) => {
+    const newQuantity = Math.max(1, quantity + delta)
+    if (offer && offer.quantity > 0) {
+      setQuantity(Math.min(newQuantity, offer.quantity))
+    } else {
+      setQuantity(newQuantity)
+    }
+  }
+
+  return {
+    quantity,
+    offer,
+    priceText,
+    handleAddToBasket,
+    handleQuantityChange,
+  }
+}

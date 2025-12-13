@@ -1,21 +1,25 @@
 "use client"
 
-import { Offer } from "@/types"
+import { formatPrice } from "@/utils/price"
 
 interface QuantitySelectorProps {
-  offer: Offer
+  price: string
+  currency: string
+  unit: string
   quantity: number
   onQuantityChange: (delta: number) => void
   disabled?: boolean
 }
 
 export function QuantitySelector({
-  offer,
+  price,
+  currency,
+  unit,
   quantity,
   onQuantityChange,
   disabled = false,
 }: QuantitySelectorProps) {
-  const totalPrice = (parseFloat(offer.price) * quantity).toFixed(2)
+  const totalPrice = formatPrice((parseFloat(price) * quantity).toString())
 
   return (
     <div className="flex items-center gap-2 p-3 border border-lightgray rounded-lg bg-white">
@@ -32,10 +36,10 @@ export function QuantitySelector({
       {/* Информация по центру в две строки */}
       <div className="flex-1 flex flex-col items-center justify-center">
         <div className="text-base font-medium text-black">
-          {quantity} {offer.unit.toUpperCase()}
+          {quantity} {unit.toUpperCase()}
         </div>
         <div className="text-xs text-gray">
-          на {totalPrice} {offer.currency}
+          на {totalPrice} {currency}
         </div>
       </div>
 

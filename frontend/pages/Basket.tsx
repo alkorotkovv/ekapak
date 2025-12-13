@@ -5,22 +5,19 @@ import { removeFromBasket, updateQuantity } from "@/store/slices/basketSlice"
 import Image from "next/image"
 import Link from "next/link"
 import { QuantitySelector } from "@/components/QuantitySelector"
+import { formatPrice } from "@/utils/price"
 
 export function Basket() {
   const basketItems = useAppSelector(state => state.basket.items)
   const total = useAppSelector(state => state.basket.total)
   const dispatch = useAppDispatch()
 
-  const handleRemove = (productUuid: string, offerUuid: string) => {
-    dispatch(removeFromBasket({ productUuid, offerUuid }))
+  const handleRemove = (productUuid: string) => {
+    dispatch(removeFromBasket({ productUuid }))
   }
 
-  const handleQuantityChange = (productUuid: string, offerUuid: string, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      handleRemove(productUuid, offerUuid)
-    } else {
-      dispatch(updateQuantity({ productUuid, offerUuid, quantity: newQuantity }))
-    }
+  const handleQuantityChange = (productUuid: string, newQuantity: number) => {
+    dispatch(updateQuantity({ productUuid, quantity: newQuantity }))
   }
 
   const handleCheckout = () => {
@@ -60,13 +57,18 @@ export function Basket() {
                   ? item.product.images[0].card_url
                   : null
 
+              const offer = item.product.offers?.[0] ?? null
+
+              // Если оффера нет, не показываем товар (такого не должно быть, но на всякий случай)
+              if (!offer) return null
+
               const isInStock = item.product["Наличие"] === "Да в наличии"
-              const unitPrice = parseFloat(item.offer.price)
-              const totalPrice = unitPrice * item.quantity
+              const unitPrice = offer.price
+              const totalPrice = (parseFloat(offer.price) * item.quantity).toString()
 
               return (
                 <div
-                  key={`${item.product.uuid}-${item.offer.uuid}`}
+                  key={item.product.uuid}
                   className="bg-white rounded-lg shadow-sm p-6 flex items-center gap-6"
                 >
                   {/* Изображение товара */}
@@ -118,14 +120,12 @@ export function Basket() {
                   {/* Поле количества */}
                   <div className="flex-shrink-0">
                     <QuantitySelector
-                      offer={item.offer}
+                      price={offer.price}
+                      currency={offer.currency}
+                      unit={offer.unit}
                       quantity={item.quantity}
                       onQuantityChange={delta =>
-                        handleQuantityChange(
-                          item.product.uuid,
-                          item.offer.uuid,
-                          item.quantity + delta
-                        )
+                        handleQuantityChange(item.product.uuid, item.quantity + delta)
                       }
                     />
                   </div>
@@ -135,18 +135,10 @@ export function Basket() {
                     <p
                       className={`text-p-price ${isInStock ? "text-black" : "text-blue"} font-bold`}
                     >
-                      {totalPrice.toLocaleString("ru-RU", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                      ₽
+                      {formatPrice(totalPrice)} ₽
                     </p>
                     <p className="text-xs text-gray mt-1 whitespace-nowrap">
-                      {item.quantity} x{" "}
-                      {unitPrice.toLocaleString("ru-RU", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {item.quantity} x {formatPrice(unitPrice)}
                     </p>
                   </div>
 
@@ -159,7 +151,7 @@ export function Basket() {
                       <Image src="/assets/icons/heart.png" alt="Избранное" width={16} height={15} />
                     </button>
                     <button
-                      onClick={() => handleRemove(item.product.uuid, item.offer.uuid)}
+                      onClick={() => handleRemove(item.product.uuid)}
                       className="w-8 h-8 flex items-center justify-center bg-lightgray bg-opacity-30 rounded-full hover:bg-opacity-50 transition-colors"
                       aria-label="Удалить из корзины"
                     >
@@ -177,13 +169,7 @@ export function Basket() {
               <h2 className="text-h2 text-black mb-4">Итого</h2>
               <div className="flex justify-between items-center mb-6 pb-6 border-b border-lightgray">
                 <span className="text-p text-black">Товаров: {basketItems.length}</span>
-                <span className="text-p-price text-black">
-                  {total.toLocaleString("ru-RU", {
-                    minimumFractionDigits: 1,
-                    maximumFractionDigits: 1,
-                  })}{" "}
-                  RUB
-                </span>
+                <span className="text-p-price text-black">{formatPrice(total.toString())} RUB</span>
               </div>
               <button
                 onClick={handleCheckout}
