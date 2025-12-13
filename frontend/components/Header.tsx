@@ -9,7 +9,6 @@ export function Header() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Реализовать поиск
     console.log("Поиск:", searchQuery)
   }
 

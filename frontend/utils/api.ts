@@ -1,4 +1,4 @@
-import { Product, ProductsResponse, CategoriesResponse } from "@/types"
+import { Product, Category } from "@/types"
 
 // Базовый URL API
 // Эти функции используются на сервере (SSR) и на клиенте (через hooks)
@@ -9,7 +9,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.ekapak.ru/a
  * Используется на сервере (SSR prefetch) и на клиенте (через useProducts hook)
  * @param categoryUuid - UUID категории (опционально)
  */
-export const fetchProducts = async (categoryUuid?: string): Promise<ProductsResponse> => {
+export const fetchProducts = async (categoryUuid?: string): Promise<Product[]> => {
   const url = categoryUuid
     ? `${API_BASE_URL}/products?category=${categoryUuid}`
     : `${API_BASE_URL}/products`
@@ -21,7 +21,8 @@ export const fetchProducts = async (categoryUuid?: string): Promise<ProductsResp
   if (!response.ok) {
     throw new Error("Failed to fetch products")
   }
-  return response.json()
+  const result = await response.json()
+  return result.data || []
 }
 
 /**
@@ -37,19 +38,20 @@ export const fetchProduct = async (uuid: string): Promise<Product> => {
     throw new Error("Failed to fetch product")
   }
   const result = await response.json()
-  return result.data || result
+  return result.data || {}
 }
 
 /**
  * Получение списка категорий
  * Используется на сервере (SSR prefetch) и на клиенте (через useCategories hook)
  */
-export const fetchCategories = async (): Promise<CategoriesResponse> => {
+export const fetchCategories = async (): Promise<Category[]> => {
   const response = await fetch(`${API_BASE_URL}/categories`, {
     next: { revalidate: 300 }, // Revalidate every 5 minutes
   })
   if (!response.ok) {
     throw new Error("Failed to fetch categories")
   }
-  return response.json()
+  const result = await response.json()
+  return result.data || []
 }

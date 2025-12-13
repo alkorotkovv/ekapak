@@ -9,7 +9,7 @@ interface ProductsProps {
 }
 
 export function Products({ products, selectedCategory }: ProductsProps) {
-  if (products.length === 0) {
+  if (!products.length) {
     return <div className="py-12 text-center text-p text-gray">Товары не найдены</div>
   }
 

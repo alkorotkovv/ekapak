@@ -76,9 +76,7 @@ export function ProductCard({ product, selectedCategory }: ProductCardProps) {
 
       <div className="p-[20px] flex flex-col flex-1 gap-3">
         {/* Артикул серым цветом слева */}
-        {product.article && (
-          <div className="text-p-article text-gray">Артикул: {product.article}</div>
-        )}
+        {product.article && <div className="text-p-article text-gray">Арт. {product.article}</div>}
         {/* Описание - максимум 3 строки, кликабельное */}
         <Link href={productUrl} className="block">
           {product.description && (

@@ -206,7 +206,7 @@ export function Product({ uuid }: ProductProps) {
                     quantity={quantity}
                     onQuantityChange={handleQuantityChange}
                     onAddToCart={handleAddToCart}
-                    disabled={!primaryOffer || primaryOffer.quantity === 0}
+                    disabled={!primaryOffer || !primaryOffer.quantity}
                   />
                 </div>
               )}

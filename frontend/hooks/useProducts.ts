@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import { fetchProducts, fetchProduct } from "@/utils/api"
-import { ProductsResponse, Product } from "@/types"
+import { Product } from "@/types"
 
 // Клиентский hook для получения списка товаров
 // Использует функции из utils/api.ts, чтобы избежать дублирования кода
 export const useProducts = (categoryUuid?: string) => {
-  return useQuery<ProductsResponse>({
+  return useQuery<Product[]>({
     queryKey: ["products", categoryUuid],
     queryFn: () => fetchProducts(categoryUuid),
     staleTime: 60 * 1000,
