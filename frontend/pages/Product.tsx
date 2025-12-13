@@ -1,8 +1,9 @@
 "use client"
 
 import { useProduct } from "@/hooks/useProducts"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { QuantitySelector } from "@/components/QuantitySelector"
+import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { Carousel } from "antd"
 import Image from "next/image"
 import { useProductQuantity } from "@/hooks/useProductQuantity"
@@ -13,22 +14,12 @@ interface ProductProps {
 
 export function Product({ uuid }: ProductProps) {
   const { data, isLoading, error } = useProduct(uuid)
-  const router = useRouter()
   const searchParams = useSearchParams()
 
   const { quantity, offer, priceText, handleAddToBasket, handleQuantityChange } =
     useProductQuantity({ product: data ?? null })
 
   const categoryFromUrl = searchParams?.get("category") || undefined
-
-  const handleBack = () => {
-    if (categoryFromUrl) {
-      // Если категория есть в URL - возвращаемся на каталог с сохранением категории
-      router.push(`/catalog?category=${categoryFromUrl}`)
-    } else {
-      router.push("/catalog")
-    }
-  }
 
   // Определяем статус наличия
   const isInStock = data?.["Наличие"] === "Да в наличии" ? true : false
@@ -71,25 +62,16 @@ export function Product({ uuid }: ProductProps) {
   const productImages = data?.images || []
 
   return (
-    <div className="flex flex-1 max-w-container mx-auto w-full pt-8">
+    <div className="flex flex-1 max-w-container mx-auto w-full pt-4 lg:pt-8 px-2 lg:px-0">
       <main className="flex-1 w-full">
-        {/* Кнопка "Назад" */}
-        <div className="mb-4">
-          <button
-            onClick={handleBack}
-            className="flex px-2 text-blue hover:text-lightblue transition-colors"
-          >
-            Назад
-          </button>
-        </div>
-
+        <Breadcrumbs categoryUuid={categoryFromUrl || data?.category_uuid} />
         <div className="bg-white rounded-lg shadow-sm p-6 lg:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Левая колонка - изображения */}
             <div className="w-full flex justify-center items-start">
               <div className="w-full max-w-md mx-auto lg:mx-0">
                 {productImages.length > 0 ? (
-                  <Carousel autoplay dots arrows className="product-carousel" dotPosition="bottom">
+                  <Carousel autoplay dots arrows className="product-carousel">
                     {productImages.map((image, index) => (
                       <div key={index} className="relative w-full h-64 md:h-80">
                         <Image

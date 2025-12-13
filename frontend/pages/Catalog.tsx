@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { useProducts } from "@/hooks/useProducts"
 import { Products } from "@/components/Products"
 import { Categories } from "@/components/Categories"
+import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { Pagination } from "antd"
 
 const ITEMS_PER_PAGE = 8
@@ -50,6 +51,7 @@ export function Catalog() {
       </div>
 
       <main className="flex-1 min-w-0">
+        <Breadcrumbs categoryUuid={selectedCategory} />
         {isLoading && <div className="py-8 text-center text-p text-gray">Загрузка...</div>}
 
         {error && (
