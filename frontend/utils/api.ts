@@ -7,7 +7,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.ekapak.ru/a
 /**
  * Получение списка товаров
  * Используется на сервере (SSR prefetch) и на клиенте (через useProducts hook)
- * @param categoryUuid - UUID категории (опционально)
  */
 export const fetchProducts = async (categoryUuid?: string): Promise<Product[]> => {
   const url = categoryUuid
@@ -28,7 +27,6 @@ export const fetchProducts = async (categoryUuid?: string): Promise<Product[]> =
 /**
  * Получение одного товара по UUID
  * Используется на сервере (SSR prefetch) и на клиенте (через useProduct hook)
- * @param uuid - UUID товара
  */
 export const fetchProduct = async (uuid: string): Promise<Product> => {
   const response = await fetch(`${API_BASE_URL}/products/${uuid}`, {

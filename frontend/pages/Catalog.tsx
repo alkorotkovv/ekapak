@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useProducts } from "@/hooks/useProducts"
 import { Products } from "@/components/Products"
 import { Categories } from "@/components/Categories"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { Pagination } from "antd"
+import { useAppSelector } from "@/store/hooks"
 
 const ITEMS_PER_PAGE = 8
 
@@ -14,13 +15,18 @@ export function Catalog() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  // Получаем категорию только из URL - это единственный источник истины
+  // Получаем категорию из URL и поисковый запрос из Redux
   const selectedCategory = searchParams?.get("category") || undefined
+  const searchQuery = useAppSelector(state => state.search.query)
   const [currentPage, setCurrentPage] = useState(1)
 
   const { data, isLoading, error } = useProducts(selectedCategory)
 
-  // Сбрасываем страницу при смене категории
+  // Сбрасываем страницу при смене категории или поискового запроса
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedCategory, searchQuery])
+
   const handleCategorySelect = (categoryUuid: string | undefined) => {
     setCurrentPage(1)
 
@@ -35,14 +41,27 @@ export function Catalog() {
     router.push(newUrl, { scroll: false })
   }
 
+  // Фильтруем товары по поисковому запросу (по названию без учета регистра)
+  const filteredProducts = useMemo(() => {
+    if (!data || !data.length) return []
+
+    if (!searchQuery.trim()) return data
+
+    const normalizedQuery = searchQuery.toLowerCase().trim()
+    return data.filter(product => {
+      const name = product.name?.toLowerCase() || ""
+      return name.includes(normalizedQuery)
+    })
+  }, [data, searchQuery])
+
   // Вычисляем товары для текущей страницы
   const paginatedProducts = useMemo(() => {
-    if (!data || !data.length) return []
+    if (!filteredProducts.length) return []
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
     const endIndex = startIndex + ITEMS_PER_PAGE
-    return data.slice(startIndex, endIndex)
-  }, [data, currentPage])
+    return filteredProducts.slice(startIndex, endIndex)
+  }, [filteredProducts, currentPage])
 
   return (
     <div className="flex flex-1 flex-col max-w-container mx-auto w-full">
@@ -71,13 +90,13 @@ export function Catalog() {
             <div className="py-12 text-center text-p text-gray">Товары не найдены</div>
           )}
 
-          {!isLoading && !error && data && data.length > 0 && (
+          {!isLoading && !error && filteredProducts.length > 0 && (
             <>
               <Products products={paginatedProducts} selectedCategory={selectedCategory} />
               <div className="my-8 flex flex-col items-center gap-4">
                 <Pagination
                   current={currentPage}
-                  total={data.length}
+                  total={filteredProducts.length}
                   pageSize={ITEMS_PER_PAGE}
                   onChange={page => setCurrentPage(page)}
                   showSizeChanger={false}
@@ -87,6 +106,12 @@ export function Catalog() {
                 />
               </div>
             </>
+          )}
+
+          {!isLoading && !error && filteredProducts.length === 0 && data && data.length > 0 && (
+            <div className="py-12 text-center text-p text-gray">
+              {searchQuery ? "Товары по запросу не найдены" : "Товары не найдены"}
+            </div>
           )}
         </main>
       </div>

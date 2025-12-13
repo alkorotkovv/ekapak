@@ -1,19 +1,37 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useAppSelector } from "@/store/hooks"
+import { useAppSelector, useAppDispatch } from "@/store/hooks"
+import { setSearchQuery } from "@/store/slices/searchSlice"
+import { debounce } from "@/utils/debounce"
 
 export function Header() {
-  const [searchQuery, setSearchQuery] = useState("")
+  const dispatch = useAppDispatch()
+  const searchQuery = useAppSelector(state => state.search.query)
+  // Локальное состояние для инпута (для отзывчивости UI)
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery)
   const basketItemsCount = useAppSelector(state =>
     state.basket.items.reduce((sum, item) => sum + item.quantity, 0)
   )
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Поиск:", searchQuery)
+  // Синхронизируем локальное состояние с Redux при изменении извне
+  useEffect(() => {
+    setLocalSearchQuery(searchQuery)
+  }, [searchQuery])
+
+  // Создаем debounced функцию для обновления поискового запроса в Redux
+  const debouncedSetSearchQuery = useMemo(
+    () => debounce((query: string) => dispatch(setSearchQuery(query)), 300),
+    [dispatch]
+  )
+
+  const handleSearchChange = (value: string) => {
+    // Обновляем локальное состояние сразу для отзывчивости UI
+    setLocalSearchQuery(value)
+    // Debounced обновление Redux для фильтрации (выполнится через 300ms после последнего ввода)
+    debouncedSetSearchQuery(value)
   }
 
   return (
@@ -73,7 +91,7 @@ export function Header() {
       {/* Нижняя секция с навигацией */}
       <div className="border-lightgray">
         <div className="px-4 sm:px-6 lg:px-8">
-          {/* Мобильная версия - две строки (до lg брейкпоинта) */}
+          {/* Мобильная версия */}
           <div className="lg:hidden flex flex-col gap-3 py-3">
             {/* Верхняя строка: логотип, бургер и корзина */}
             <div className="flex items-center justify-between">
@@ -110,12 +128,12 @@ export function Header() {
             </div>
 
             {/* Нижняя строка: поиск */}
-            <form onSubmit={handleSearch} className="w-full">
+            <div className="w-full">
               <div className="relative">
                 <input
                   type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
+                  value={localSearchQuery}
+                  onChange={e => handleSearchChange(e.target.value)}
                   placeholder="Поиск"
                   className="w-full px-4 py-2.5 pl-10 pr-4 border border-lightgray rounded-lg focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent text-sm"
                 />
@@ -123,10 +141,10 @@ export function Header() {
                   <Image src="/assets/icons/search.png" alt="Search" width={20} height={20} />
                 </div>
               </div>
-            </form>
+            </div>
           </div>
 
-          {/* Десктопная версия - одна строка (от lg брейкпоинта) */}
+          {/* Десктопная версия */}
           <div className="hidden lg:flex items-center justify-between h-20 gap-4">
             {/* Логотип слева */}
             <Link href="/catalog" className="flex items-center gap-3 flex-shrink-0">
@@ -149,12 +167,12 @@ export function Header() {
             </Link>
 
             {/* Поиск по центру */}
-            <form onSubmit={handleSearch} className="flex-1 max-w-2xl">
+            <div className="flex-1 max-w-2xl">
               <div className="relative">
                 <input
                   type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
+                  value={localSearchQuery}
+                  onChange={e => handleSearchChange(e.target.value)}
                   placeholder="Поиск"
                   className="w-full px-4 py-3 pl-12 pr-4 border border-lightgray rounded-lg focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent text-sm"
                 />
@@ -162,7 +180,7 @@ export function Header() {
                   <Image src="/assets/icons/search.png" alt="Search" width={20} height={20} />
                 </div>
               </div>
-            </form>
+            </div>
 
             {/* Иконки пользователя, избранного и корзины */}
             <div className="hidden lg:flex items-center gap-6 flex-shrink-0 h-20">
