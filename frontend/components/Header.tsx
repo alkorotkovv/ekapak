@@ -93,26 +93,20 @@ export function Header() {
             {/* Верхняя строка: логотип, бургер и корзина */}
             <div className="flex items-center justify-between">
               <Link href="/catalog" className="flex items-center gap-3 flex-shrink-0">
-                <Image
-                  src="/assets/icons/logo.png"
-                  alt="EKAPAK"
-                  width={153}
-                  height={19}
-                  className="w-auto h-4"
-                />
+                <Image src="/assets/icons/logo.png" alt="EKAPAK" width={133} height={15} />
               </Link>
 
               <div className="flex items-center gap-3">
                 <Link
                   href="/catalog"
-                  className="flex items-center justify-center w-10 h-10 bg-lightgray bg-opacity-30 rounded-lg hover:bg-opacity-40 transition-colors flex-shrink-0"
+                  className="flex items-center justify-center bg-lightgray bg-opacity-30 rounded-lg hover:bg-opacity-40 transition-colors flex-shrink-0"
                 >
                   <Image src="/assets/icons/hamburger.png" alt="Menu" width={16} height={16} />
                 </Link>
 
                 <Link
                   href="/basket"
-                  className="flex items-center justify-center w-10 h-10 relative flex-shrink-0"
+                  className="flex items-center justify-center relative flex-shrink-0"
                 >
                   <Image src="/assets/icons/basket.png" alt="Basket" width={20} height={18} />
                   {basketItemsCount > 0 && (
@@ -145,13 +139,7 @@ export function Header() {
           <div className="hidden lg:flex items-center justify-between h-20 gap-4">
             {/* Логотип слева */}
             <Link href="/catalog" className="flex items-center gap-3 flex-shrink-0">
-              <Image
-                src="/assets/icons/logo.png"
-                alt="EKAPAK"
-                width={153}
-                height={19}
-                className="w-auto h-5"
-              />
+              <Image src="/assets/icons/logo.png" alt="EKAPAK" width={153} height={19} />
             </Link>
 
             {/* Кнопка Каталог */}
