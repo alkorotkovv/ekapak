@@ -26,7 +26,7 @@ export function Basket() {
   }
 
   return (
-    <div className="flex flex-1 max-w-container mx-auto w-full pt-4 lg:pt-8 px-2 lg:px-0">
+    <div className="flex flex-1 max-w-container mx-auto w-full">
       <main className="flex-1 w-full">
         <Breadcrumbs pageName="Корзина" />
 

@@ -1,61 +1,41 @@
 "use client"
 
+import { Breadcrumb } from "antd"
 import Link from "next/link"
 import { useCategories } from "@/hooks/useCategories"
 
 interface BreadcrumbsProps {
   categoryUuid?: string
-  productName?: string
   pageName?: string
 }
 
-export function Breadcrumbs({ categoryUuid, productName, pageName }: BreadcrumbsProps) {
+export function Breadcrumbs({ categoryUuid, pageName }: BreadcrumbsProps) {
   const { data: categories } = useCategories()
 
   const category = categoryUuid ? categories?.find(cat => cat.uuid === categoryUuid) : null
+  const isBasketPage = pageName === "Корзина"
 
-  const items = [{ label: "Главная", href: "/" }]
+  // Декларативное описание структуры хлебных крошек
+  const breadcrumbConfig = [
+    { title: "Главная", href: "/", show: true },
+    { title: "Каталог", href: "/catalog", show: !isBasketPage },
+    {
+      title: category?.name || "",
+      href: `/catalog?category=${categoryUuid}`,
+      show: !!category,
+    },
+    { title: pageName || "", href: "#", show: !!pageName },
+  ]
 
-  // Если это страница корзины, не добавляем "Каталог"
-  if (!pageName || pageName !== "Корзина") {
-    items.push({ label: "Каталог", href: "/catalog" })
-  }
-
-  if (category) {
-    items.push({
-      label: category.name,
-      href: `/catalog?category=${category.uuid}`,
-    })
-  }
-
-  if (productName) {
-    items.push({
-      label: productName,
-      href: "#",
-    })
-  }
-
-  if (pageName) {
-    items.push({
-      label: pageName,
-      href: "#",
-    })
-  }
+  // Фильтруем только видимые элементы
+  const items = breadcrumbConfig.filter(item => item.show && item.title)
 
   return (
-    <nav className="flex items-center gap-2 text-xs lg:text-sm text-gray my-1 mx-4">
-      {items.map((item, index) => (
-        <div key={index} className="flex items-center gap-2">
-          {index > 0 && <span className="text-lightgray">/</span>}
-          {index === items.length - 1 ? (
-            <span className="text-black">{item.label}</span>
-          ) : (
-            <Link href={item.href} className="hover:text-blue transition-colors">
-              {item.label}
-            </Link>
-          )}
-        </div>
-      ))}
-    </nav>
+    <Breadcrumb
+      className="text-xs lg:text-sm my-1 mx-4"
+      items={items.map(item => ({
+        title: <Link href={item.href}>{item.title}</Link>,
+      }))}
+    />
   )
 }
