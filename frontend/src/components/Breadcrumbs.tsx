@@ -5,19 +5,19 @@ import Link from "next/link"
 import { useCategoriesQuery } from "@/hooks/useCategories"
 
 interface BreadcrumbsProps {
-  categoryUuid?: string
+  categorySlug?: string
   pageName?: string
 }
 
-export function Breadcrumbs({ categoryUuid, pageName }: BreadcrumbsProps) {
+export function Breadcrumbs({ categorySlug, pageName }: BreadcrumbsProps) {
   const { data: categories } = useCategoriesQuery()
-  const category = categoryUuid ? categories?.find(cat => cat.uuid === categoryUuid) : null
+  const category = categorySlug ? categories?.find(cat => cat.slug === categorySlug) : null
   const isBasketPage = pageName === "Корзина"
 
   const items = [
     { title: "Главная", href: "/" },
     ...(!isBasketPage ? [{ title: "Каталог", href: "/catalog" }] : []),
-    ...(category ? [{ title: category.name, href: `/catalog/${categoryUuid}` }] : []),
+    ...(category ? [{ title: category.name, href: `/catalog/${category.slug}` }] : []),
     ...(pageName ? [{ title: pageName, href: "#" }] : []),
   ].filter(Boolean)
 

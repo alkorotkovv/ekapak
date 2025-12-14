@@ -12,16 +12,18 @@ import { Product } from "@/types"
 const ITEMS_PER_PAGE = 8
 
 interface CatalogProps {
+  categorySlug?: string
   categoryUuid?: string
-  initialProducts?: Product[]
+  products?: Product[]
 }
 
-export function Catalog({ categoryUuid, initialProducts }: CatalogProps = {}) {
+export function Catalog({ categorySlug, categoryUuid, products }: CatalogProps = {}) {
   // Получаем поисковый запрос из Redux
   const searchQuery = useAppSelector(state => state.search.query)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const { data, isLoading, error } = useProductsQuery(categoryUuid, initialProducts)
+  // Используем uuid для API запросов (API требует uuid, не slug)
+  const { data, isLoading, error } = useProductsQuery(categoryUuid, products)
 
   // Сбрасываем страницу при смене категории или поискового запроса
   useEffect(() => {
@@ -53,20 +55,20 @@ export function Catalog({ categoryUuid, initialProducts }: CatalogProps = {}) {
   return (
     <div className="flex flex-1 flex-col max-w-container mx-auto w-full">
       {/* Хлебные крошки над всем каталогом */}
-      <Breadcrumbs categoryUuid={categoryUuid} />
+      <Breadcrumbs categorySlug={categorySlug} />
 
       <div className="flex flex-1 gap-8 lg:flex-row flex-col">
         {/* Категории: на мобилке показываем только если категория не выбрана */}
         <div
           className={`w-full lg:w-full lg:max-w-categories flex-shrink-0 ${
-            categoryUuid ? "hidden lg:block" : "block"
+            categorySlug ? "hidden lg:block" : "block"
           }`}
         >
-          <Categories selectedCategory={categoryUuid} />
+          <Categories selectedCategory={categorySlug} />
         </div>
 
         {/* Товары: на мобилке показываем только если категория выбрана */}
-        <main className={`flex-1 min-w-0 ${categoryUuid ? "block" : "hidden lg:block"}`}>
+        <main className={`flex-1 min-w-0 ${categorySlug ? "block" : "hidden lg:block"}`}>
           {isLoading && <div className="py-8 text-center text-p text-gray">Загрузка...</div>}
 
           {error && (

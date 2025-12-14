@@ -5,14 +5,14 @@ export const revalidate = 60 // ISR
 
 interface ProductPageProps {
   params: {
-    uuid: string
+    slug: string
   }
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  // Нативная загрузка на сервере
-  const initialProduct = await fetchProduct(params.uuid)
+  // Нативная загрузка на сервере по slug
+  const product = await fetchProduct(params.slug)
 
   // Просто передаем данные
-  return <Product uuid={params.uuid} initialProduct={initialProduct} />
+  return <Product slug={params.slug} product={product} />
 }

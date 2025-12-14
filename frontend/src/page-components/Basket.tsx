@@ -67,7 +67,7 @@ export function Basket() {
                     {/* Верхняя часть на мобилке: изображение, описание, статус и кнопки */}
                     <div className="flex gap-3 lg:contents">
                       {/* Изображение товара */}
-                      <Link href={`/product/${item.product.uuid}`} className="flex-shrink-0">
+                      <Link href={`/product/${item.product.slug}`} className="flex-shrink-0">
                         <div className="w-16 h-16 lg:w-24 lg:h-24 bg-lightgray bg-opacity-30 rounded-lg overflow-hidden relative">
                           {productImage ? (
                             <Image
@@ -92,7 +92,7 @@ export function Basket() {
                           </p>
                         )}
                         <Link
-                          href={`/product/${item.product.uuid}`}
+                          href={`/product/${item.product.slug}`}
                           className="text-xs lg:text-p-description text-black hover:text-blue transition-colors line-clamp-2 lg:line-clamp-3"
                         >
                           {item.product.description || item.product.name}

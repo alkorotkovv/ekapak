@@ -1,6 +1,7 @@
 "use client"
 
 import { useProductQuery } from "@/hooks/useProducts"
+import { useCategoriesQuery } from "@/hooks/useCategories"
 import { QuantitySelector } from "@/components/QuantitySelector"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { Carousel } from "antd"
@@ -10,15 +11,20 @@ import { useProduct } from "@/hooks/useProduct"
 import { Product as ProductType } from "@/types"
 
 interface ProductProps {
-  uuid: string
-  initialProduct?: ProductType
+  slug: string
+  product?: ProductType
 }
 
-export function Product({ uuid, initialProduct }: ProductProps) {
-  const { data, isLoading, error } = useProductQuery(uuid, initialProduct)
+export function Product({ slug, product }: ProductProps) {
+  const { data, isLoading, error } = useProductQuery(slug, product)
 
   const { quantity, offer, priceText, category_uuid, handleAddToBasket, handleQuantityChange } =
     useProduct({ product: data ?? null })
+
+  // Находим категорию по category_uuid для получения slug
+  const { data: categories } = useCategoriesQuery()
+  const category = category_uuid ? categories?.find(cat => cat.uuid === category_uuid) : null
+  const categorySlug = category?.slug
 
   // Определяем статус наличия
   const isInStock = data?.["Наличие"] === "Да в наличии" ? true : false
@@ -63,7 +69,7 @@ export function Product({ uuid, initialProduct }: ProductProps) {
   return (
     <div className="flex flex-1 max-w-container mx-auto w-full">
       <main className="flex-1 w-full">
-        <Breadcrumbs categoryUuid={category_uuid} />
+        <Breadcrumbs categorySlug={categorySlug} />
         <div className="bg-white rounded-lg shadow-sm p-6 lg:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Левая колонка - изображения */}

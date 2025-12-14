@@ -30,8 +30,8 @@ export function Categories({ selectedCategory }: CategoriesProps) {
       <h2 className="text-h2 text-black px-6 pt-6 pb-4">Каталог товаров</h2>
       <div className="flex flex-col">
         {data.map((category, index) => {
-          const isSelected = selectedCategory === category.uuid
-          const categoryUrl = `/catalog/${category.uuid}`
+          const isSelected = selectedCategory === category.slug
+          const categoryUrl = `/catalog/${category.slug}`
           return (
             <div key={category.uuid}>
               <Link

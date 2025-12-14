@@ -24,8 +24,8 @@ export function ProductCard({ product, selectedCategory }: ProductCardProps) {
 
   // Формируем URL с категорией, если она выбрана
   const productUrl = selectedCategory
-    ? `/product/${product.uuid}?category=${selectedCategory}`
-    : `/product/${product.uuid}`
+    ? `/product/${product.slug}?category=${selectedCategory}`
+    : `/product/${product.slug}`
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col">
