@@ -39,7 +39,7 @@ export function Header() {
           <div className="flex items-center justify-between h-12 text-sm text-black">
             {/* Слева: адрес */}
             <div className="flex items-center gap-2">
-              <Image src="/assets/icons/location.png" alt="Location" width={16} height={20} />
+              <Image src="/icons/location.png" alt="Location" width={16} height={20} />
               <span>г. Екатеринбург, ул. Старых Большевиков, 2А/2</span>
             </div>
 
@@ -47,7 +47,7 @@ export function Header() {
             <div className="flex items-center gap-6">
               {/* Email */}
               <div className="flex items-center gap-2">
-                <Image src="/assets/icons/email.png" alt="Email" width={20} height={20} />
+                <Image src="/icons/email.png" alt="Email" width={20} height={20} />
                 <span>info@ekapak.ru</span>
               </div>
 
@@ -58,7 +58,7 @@ export function Header() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
-                <Image src="/assets/icons/whatsapp.png" alt="WhatsApp" width={20} height={20} />
+                <Image src="/icons/whatsapp.png" alt="WhatsApp" width={20} height={20} />
               </a>
 
               {/* Telegram */}
@@ -68,7 +68,7 @@ export function Header() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
-                <Image src="/assets/icons/telegram.png" alt="Telegram" width={20} height={20} />
+                <Image src="/icons/telegram.png" alt="Telegram" width={20} height={20} />
               </a>
 
               {/* Телефоны */}
@@ -93,7 +93,7 @@ export function Header() {
             {/* Верхняя строка: логотип, бургер и корзина */}
             <div className="flex items-center justify-between">
               <Link href="/catalog" className="flex items-center gap-3 flex-shrink-0">
-                <Image src="/assets/icons/logo.png" alt="EKAPAK" width={133} height={15} />
+                <Image src="/icons/logo.png" alt="EKAPAK" width={133} height={15} />
               </Link>
 
               <div className="flex items-center gap-3">
@@ -101,14 +101,14 @@ export function Header() {
                   href="/catalog"
                   className="flex items-center justify-center bg-lightgray bg-opacity-30 rounded-lg hover:bg-opacity-40 transition-colors flex-shrink-0"
                 >
-                  <Image src="/assets/icons/hamburger.png" alt="Menu" width={16} height={16} />
+                  <Image src="/icons/hamburger.png" alt="Menu" width={16} height={16} />
                 </Link>
 
                 <Link
                   href="/basket"
                   className="flex items-center justify-center relative flex-shrink-0"
                 >
-                  <Image src="/assets/icons/basket.png" alt="Basket" width={20} height={18} />
+                  <Image src="/icons/basket.png" alt="Basket" width={20} height={18} />
                   {basketItemsCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-blue text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {basketItemsCount > 99 ? "99+" : basketItemsCount}
@@ -129,7 +129,7 @@ export function Header() {
                   className="w-full px-4 py-2.5 pl-10 pr-4 border border-lightgray rounded-lg focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent text-sm"
                 />
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <Image src="/assets/icons/search.png" alt="Search" width={20} height={20} />
+                  <Image src="/icons/search.png" alt="Search" width={20} height={20} />
                 </div>
               </div>
             </div>
@@ -139,7 +139,7 @@ export function Header() {
           <div className="hidden lg:flex items-center justify-between h-20 gap-4">
             {/* Логотип слева */}
             <Link href="/catalog" className="flex items-center gap-3 flex-shrink-0">
-              <Image src="/assets/icons/logo.png" alt="EKAPAK" width={153} height={19} />
+              <Image src="/icons/logo.png" alt="EKAPAK" width={153} height={19} />
             </Link>
 
             {/* Кнопка Каталог */}
@@ -147,7 +147,7 @@ export function Header() {
               href="/catalog"
               className="flex items-center gap-2 px-4 py-2 bg-lightgray bg-opacity-30 rounded-lg hover:bg-opacity-40 transition-colors flex-shrink-0"
             >
-              <Image src="/assets/icons/hamburger.png" alt="Menu" width={16} height={16} />
+              <Image src="/icons/hamburger.png" alt="Menu" width={16} height={16} />
               <span className="text-sm font-medium text-black">Каталог</span>
             </Link>
 
@@ -162,7 +162,7 @@ export function Header() {
                   className="w-full px-4 py-3 pl-12 pr-4 border border-lightgray rounded-lg focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent text-sm"
                 />
                 <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                  <Image src="/assets/icons/search.png" alt="Search" width={20} height={20} />
+                  <Image src="/icons/search.png" alt="Search" width={20} height={20} />
                 </div>
               </div>
             </div>
@@ -171,13 +171,13 @@ export function Header() {
             <div className="hidden lg:flex items-center gap-6 flex-shrink-0 h-20">
               {/* Профиль */}
               <button className="flex flex-col items-center justify-between h-10 hover:opacity-70 transition-opacity">
-                <Image src="/assets/icons/user.png" alt="Profile" width={12} height={12} />
+                <Image src="/icons/user.png" alt="Profile" width={12} height={12} />
                 <span className="text-xs text-black">Профиль</span>
               </button>
 
               {/* Избранное */}
               <button className="flex flex-col items-center justify-between h-10 hover:opacity-70 transition-opacity">
-                <Image src="/assets/icons/heart.png" alt="Favorites" width={17} height={15} />
+                <Image src="/icons/heart.png" alt="Favorites" width={17} height={15} />
                 <span className="text-xs text-black">Избранное</span>
               </button>
 
@@ -186,7 +186,7 @@ export function Header() {
                 className="flex flex-col items-center justify-between h-10 hover:opacity-70 transition-opacity relative"
               >
                 <div className="relative">
-                  <Image src="/assets/icons/basket.png" alt="Basket" width={17} height={15} />
+                  <Image src="/icons/basket.png" alt="Basket" width={17} height={15} />
                   {basketItemsCount > 0 && (
                     <span className="absolute -top-2 -right-2 bg-blue text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {basketItemsCount > 99 ? "99+" : basketItemsCount}

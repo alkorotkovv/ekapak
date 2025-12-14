@@ -42,7 +42,13 @@ export function Categories({ selectedCategory, onCategorySelect }: CategoriesPro
                 }`}
               >
                 <span>{category.name}</span>
-                <Image src="/assets/icons/arrow.png" alt="arrow" width={24} height={24} />
+                <Image
+                  src="/icons/arrow.png"
+                  alt="arrow"
+                  width={24}
+                  height={24}
+                  className="flex-shrink-0"
+                />
               </button>
             </div>
           )

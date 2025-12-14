@@ -5,6 +5,7 @@ Frontend приложение на Next.js с Redux и React Query.
 ## Установка
 
 ```bash
+cd frontend
 npm install
 ```
 
@@ -20,8 +21,9 @@ npm run dev
 
 - `app/` - страницы и роутинг Next.js (App Router)
 - `components/` - React компоненты
-- `store/` - Redux store и slices
 - `hooks/` - кастомные хуки (включая React Query hooks)
+- `pages/` - страницы приложения
+- `store/` - Redux store и slices
 - `types/` - TypeScript типы
 - `utils/` - утилиты и вспомогательные функции
 

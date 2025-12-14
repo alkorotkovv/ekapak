@@ -117,24 +117,14 @@ export function Basket() {
                             className="w-7 h-7 flex items-center justify-center bg-lightgray bg-opacity-30 rounded-full hover:bg-opacity-50 transition-colors"
                             aria-label="Добавить в избранное"
                           >
-                            <Image
-                              src="/assets/icons/heart.png"
-                              alt="Избранное"
-                              width={14}
-                              height={13}
-                            />
+                            <Image src="/icons/heart.png" alt="Избранное" width={14} height={13} />
                           </button>
                           <button
                             onClick={() => handleRemove(item.product.uuid)}
                             className="w-7 h-7 flex items-center justify-center bg-lightgray bg-opacity-30 rounded-full hover:bg-opacity-50 transition-colors"
                             aria-label="Удалить из корзины"
                           >
-                            <Image
-                              src="/assets/icons/trash.png"
-                              alt="Удалить"
-                              width={14}
-                              height={14}
-                            />
+                            <Image src="/icons/trash.png" alt="Удалить" width={14} height={14} />
                           </button>
                         </div>
                       </div>
@@ -189,19 +179,14 @@ export function Basket() {
                         className="w-8 h-8 flex items-center justify-center bg-lightgray bg-opacity-30 rounded-full hover:bg-opacity-50 transition-colors"
                         aria-label="Добавить в избранное"
                       >
-                        <Image
-                          src="/assets/icons/heart.png"
-                          alt="Избранное"
-                          width={16}
-                          height={15}
-                        />
+                        <Image src="/icons/heart.png" alt="Избранное" width={16} height={15} />
                       </button>
                       <button
                         onClick={() => handleRemove(item.product.uuid)}
                         className="w-8 h-8 flex items-center justify-center bg-lightgray bg-opacity-30 rounded-full hover:bg-opacity-50 transition-colors"
                         aria-label="Удалить из корзины"
                       >
-                        <Image src="/assets/icons/trash.png" alt="Удалить" width={16} height={16} />
+                        <Image src="/icons/trash.png" alt="Удалить" width={16} height={16} />
                       </button>
                     </div>
                   </div>
