@@ -13,6 +13,15 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "ЕКАПАК - упаковка и пленка",
   description: "Упаковка и пленка",
+  keywords: ["упаковка", "пленка", "стрейч", "скотч"],
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: "https://ekapak.ru",
+    siteName: "ЕКАПАК",
+    title: "ЕКАПАК - упаковка и пленка оптом",
+    description: "Оптовая продажа упаковочных материалов",
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -22,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <div className="min-h-screen flex flex-col items-center bg-background">
             <Header />
-            {children}
+            <main className="flex-1 w-full">{children}</main>
           </div>
         </Providers>
       </body>

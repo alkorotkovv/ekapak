@@ -1,6 +1,6 @@
+// components/ui/Breadcrumbs.tsx - версия без иконок
 "use client"
 
-import { Breadcrumb } from "antd"
 import Link from "next/link"
 import { useCategoriesQuery } from "@/hooks/useCategories"
 
@@ -11,31 +11,32 @@ interface BreadcrumbsProps {
 
 export function Breadcrumbs({ categoryUuid, pageName }: BreadcrumbsProps) {
   const { data: categories } = useCategoriesQuery()
-
   const category = categoryUuid ? categories?.find(cat => cat.uuid === categoryUuid) : null
   const isBasketPage = pageName === "Корзина"
 
-  // Декларативное описание структуры хлебных крошек
-  const breadcrumbConfig = [
-    { title: "Главная", href: "/", show: true },
-    { title: "Каталог", href: "/catalog", show: !isBasketPage },
-    {
-      title: category?.name || "",
-      href: categoryUuid ? `/catalog/${categoryUuid}` : "/catalog",
-      show: !!category,
-    },
-    { title: pageName || "", href: "#", show: !!pageName },
-  ]
-
-  // Фильтруем только видимые элементы
-  const items = breadcrumbConfig.filter(item => item.show && item.title)
+  const items = [
+    { title: "Главная", href: "/" },
+    ...(!isBasketPage ? [{ title: "Каталог", href: "/catalog" }] : []),
+    ...(category ? [{ title: category.name, href: `/catalog/${categoryUuid}` }] : []),
+    ...(pageName ? [{ title: pageName, href: "#" }] : []),
+  ].filter(Boolean)
 
   return (
-    <Breadcrumb
-      className="text-xs lg:text-sm my-1 mx-4"
-      items={items.map(item => ({
-        title: <Link href={item.href}>{item.title}</Link>,
-      }))}
-    />
+    <nav className="text-xs lg:text-sm my-1 mx-4 flex items-center flex-wrap gap-1">
+      {items.map((item, index) => (
+        <div key={index} className="flex items-center">
+          {item.href !== "#" ? (
+            <>
+              <Link href={item.href} className="text-blue-600 hover:text-blue-800 hover:underline">
+                {item.title}
+              </Link>
+              {index < items.length - 1 && <span className="mx-2 text-gray-400">/</span>}
+            </>
+          ) : (
+            <span className="text-gray-600 font-medium">{item.title}</span>
+          )}
+        </div>
+      ))}
+    </nav>
   )
 }
