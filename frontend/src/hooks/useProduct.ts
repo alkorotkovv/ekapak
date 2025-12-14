@@ -52,4 +52,3 @@ export function useProduct({ product }: UseProductOptions) {
     handleQuantityChange,
   }
 }
-

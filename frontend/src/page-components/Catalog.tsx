@@ -7,19 +7,21 @@ import { Categories } from "@/components/Categories"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { Pagination } from "antd"
 import { useAppSelector } from "@/store/hooks"
+import { Product } from "@/types"
 
 const ITEMS_PER_PAGE = 8
 
 interface CatalogProps {
   categoryUuid?: string
+  initialProducts?: Product[]
 }
 
-export function Catalog({ categoryUuid }: CatalogProps = {}) {
+export function Catalog({ categoryUuid, initialProducts }: CatalogProps = {}) {
   // Получаем поисковый запрос из Redux
   const searchQuery = useAppSelector(state => state.search.query)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const { data, isLoading, error } = useProductsQuery(categoryUuid)
+  const { data, isLoading, error } = useProductsQuery(categoryUuid, initialProducts)
 
   // Сбрасываем страницу при смене категории или поискового запроса
   useEffect(() => {

@@ -12,8 +12,9 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, selectedCategory }: ProductCardProps) {
-  const { quantity, offer, priceText, handleAddToBasket, handleQuantityChange } =
-    useProduct({ product })
+  const { quantity, offer, priceText, handleAddToBasket, handleQuantityChange } = useProduct({
+    product,
+  })
 
   // Получаем первое изображение
   const productImage = product.images?.[0].card_url ?? null

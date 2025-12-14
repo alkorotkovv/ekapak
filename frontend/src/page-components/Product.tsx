@@ -7,12 +7,15 @@ import { Carousel } from "antd"
 import Image from "next/image"
 import { useProduct } from "@/hooks/useProduct"
 
+import { Product as ProductType } from "@/types"
+
 interface ProductProps {
   uuid: string
+  initialProduct?: ProductType
 }
 
-export function Product({ uuid }: ProductProps) {
-  const { data, isLoading, error } = useProductQuery(uuid)
+export function Product({ uuid, initialProduct }: ProductProps) {
+  const { data, isLoading, error } = useProductQuery(uuid, initialProduct)
 
   const { quantity, offer, priceText, category_uuid, handleAddToBasket, handleQuantityChange } =
     useProduct({ product: data ?? null })
