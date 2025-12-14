@@ -17,20 +17,20 @@
 }
 
 .product-carousel .slick-dots li button {
-  background: #D4D4D4;
+  background: #d4d4d4;
   border-radius: 50%;
   width: 10px;
   height: 10px;
 }
 
 .product-carousel .slick-dots li.slick-active button {
-  background: #00B0FF;
+  background: #00b0ff;
 }
 
 .product-carousel .slick-prev,
 .product-carousel .slick-next {
   z-index: 10;
-  color: #2C2C2C;
+  color: #2c2c2c;
   width: 40px;
   height: 40px;
   font-size: 20px;
@@ -39,13 +39,13 @@
 .product-carousel .slick-prev:before,
 .product-carousel .slick-next:before {
   font-size: 24px;
-  color: #2C2C2C;
+  color: #2c2c2c;
   opacity: 0.8;
 }
 
 .product-carousel .slick-prev:hover:before,
 .product-carousel .slick-next:hover:before {
-  color: #00B0FF;
+  color: #00b0ff;
   opacity: 1;
 }
 
@@ -66,4 +66,3 @@
     right: 10px;
   }
 }
-

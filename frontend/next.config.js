@@ -4,13 +4,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'api.ekapak.ru',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "api.ekapak.ru",
+        pathname: "/**",
       },
     ],
   },
 }
 
 module.exports = nextConfig
-
