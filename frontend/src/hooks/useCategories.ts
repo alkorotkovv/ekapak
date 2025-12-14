@@ -4,7 +4,7 @@ import { Category } from "@/types"
 
 // Клиентский hook для получения списка категорий
 // Использует функции из utils/api.ts, чтобы избежать дублирования кода
-export const useCategories = () => {
+export const useCategoriesQuery = () => {
   return useQuery<Category[]>({
     queryKey: ["categories"],
     queryFn: () => fetchCategories(),

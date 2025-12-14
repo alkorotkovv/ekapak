@@ -1,8 +1,7 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
-import { useProducts } from "@/hooks/useProducts"
+import { useProductsQuery } from "@/hooks/useProducts"
 import { Products } from "@/components/Products"
 import { Categories } from "@/components/Categories"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
@@ -16,13 +15,11 @@ interface CatalogProps {
 }
 
 export function Catalog({ categoryUuid }: CatalogProps = {}) {
-  const searchParams = useSearchParams()
-
   // Получаем поисковый запрос из Redux
   const searchQuery = useAppSelector(state => state.search.query)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const { data, isLoading, error } = useProducts(categoryUuid)
+  const { data, isLoading, error } = useProductsQuery(categoryUuid)
 
   // Сбрасываем страницу при смене категории или поискового запроса
   useEffect(() => {

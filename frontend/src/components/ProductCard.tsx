@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Product } from "@/types"
 import { QuantitySelector } from "./QuantitySelector"
-import { useProductQuantity } from "@/hooks/useProductQuantity"
+import { useProduct } from "@/hooks/useProduct"
 
 interface ProductCardProps {
   product: Product
@@ -13,7 +13,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, selectedCategory }: ProductCardProps) {
   const { quantity, offer, priceText, handleAddToBasket, handleQuantityChange } =
-    useProductQuantity({ product })
+    useProduct({ product })
 
   // Получаем первое изображение
   const productImage = product.images?.[0].card_url ?? null

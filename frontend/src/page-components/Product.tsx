@@ -1,25 +1,21 @@
 "use client"
 
-import { useProduct } from "@/hooks/useProducts"
-import { useSearchParams } from "next/navigation"
+import { useProductQuery } from "@/hooks/useProducts"
 import { QuantitySelector } from "@/components/QuantitySelector"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { Carousel } from "antd"
 import Image from "next/image"
-import { useProductQuantity } from "@/hooks/useProductQuantity"
+import { useProduct } from "@/hooks/useProduct"
 
 interface ProductProps {
   uuid: string
 }
 
 export function Product({ uuid }: ProductProps) {
-  const { data, isLoading, error } = useProduct(uuid)
-  const searchParams = useSearchParams()
+  const { data, isLoading, error } = useProductQuery(uuid)
 
-  const { quantity, offer, priceText, handleAddToBasket, handleQuantityChange } =
-    useProductQuantity({ product: data ?? null })
-
-  const categoryFromUrl = searchParams?.get("category") || undefined
+  const { quantity, offer, priceText, category_uuid, handleAddToBasket, handleQuantityChange } =
+    useProduct({ product: data ?? null })
 
   // Определяем статус наличия
   const isInStock = data?.["Наличие"] === "Да в наличии" ? true : false
@@ -64,7 +60,7 @@ export function Product({ uuid }: ProductProps) {
   return (
     <div className="flex flex-1 max-w-container mx-auto w-full">
       <main className="flex-1 w-full">
-        <Breadcrumbs categoryUuid={categoryFromUrl || data?.category_uuid} />
+        <Breadcrumbs categoryUuid={category_uuid} />
         <div className="bg-white rounded-lg shadow-sm p-6 lg:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Левая колонка - изображения */}

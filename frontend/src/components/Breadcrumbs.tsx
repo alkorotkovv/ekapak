@@ -2,7 +2,7 @@
 
 import { Breadcrumb } from "antd"
 import Link from "next/link"
-import { useCategories } from "@/hooks/useCategories"
+import { useCategoriesQuery } from "@/hooks/useCategories"
 
 interface BreadcrumbsProps {
   categoryUuid?: string
@@ -10,7 +10,7 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ categoryUuid, pageName }: BreadcrumbsProps) {
-  const { data: categories } = useCategories()
+  const { data: categories } = useCategoriesQuery()
 
   const category = categoryUuid ? categories?.find(cat => cat.uuid === categoryUuid) : null
   const isBasketPage = pageName === "Корзина"

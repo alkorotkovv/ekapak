@@ -24,9 +24,7 @@ export default async function CatalogPage({ params }: CatalogPageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<div className="py-8 text-center text-p text-gray">Загрузка...</div>}>
-        <Catalog categoryUuid={categoryUuid} />
-      </Suspense>
+      <Catalog categoryUuid={categoryUuid} />
     </HydrationBoundary>
   )
 }

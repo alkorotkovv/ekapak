@@ -48,7 +48,7 @@ npm run dev
 - **Debounce для поиска** - оптимизация запросов при вводе текста (300ms задержка)
 - **Единая разметка для всех устройств** - адаптивность через Tailwind классы
 - **Централизованные утилиты** - форматирование цен, debounce, API функции в отдельных модулях
-- **Кастомные хуки** - инкапсуляция логики (useProductQuantity, useProducts, useCategories)
+- **Кастомные хуки** - инкапсуляция логики (useProduct, useProductsQuery, useCategoriesQuery, useProductQuery)
 
 ## Изображения интерфейса
 

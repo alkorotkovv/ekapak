@@ -4,7 +4,7 @@ import { Product } from "@/types"
 
 // Клиентский hook для получения списка товаров
 // Использует функции из utils/api.ts, чтобы избежать дублирования кода
-export const useProducts = (categoryUuid?: string) => {
+export const useProductsQuery = (categoryUuid?: string) => {
   return useQuery<Product[]>({
     queryKey: ["products", categoryUuid],
     queryFn: () => fetchProducts(categoryUuid),
@@ -14,7 +14,7 @@ export const useProducts = (categoryUuid?: string) => {
 
 // Клиентский hook для получения одного товара
 // Использует функции из utils/api.ts, чтобы избежать дублирования кода
-export const useProduct = (uuid: string) => {
+export const useProductQuery = (uuid: string) => {
   return useQuery<Product>({
     queryKey: ["product", uuid],
     queryFn: () => fetchProduct(uuid),

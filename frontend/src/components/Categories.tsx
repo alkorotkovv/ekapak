@@ -2,14 +2,14 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useCategories } from "@/hooks/useCategories"
+import { useCategoriesQuery } from "@/hooks/useCategories"
 
 interface CategoriesProps {
   selectedCategory?: string
 }
 
 export function Categories({ selectedCategory }: CategoriesProps) {
-  const { data, isLoading, error } = useCategories()
+  const { data, isLoading, error } = useCategoriesQuery()
 
   if (isLoading)
     return (

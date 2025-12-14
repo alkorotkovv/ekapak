@@ -3,12 +3,12 @@ import { useAppDispatch } from "@/store/hooks"
 import { addToBasket } from "@/store/slices/basketSlice"
 import { Product } from "@/types"
 
-interface UseProductQuantityOptions {
+interface UseProductOptions {
   product: Product | null
 }
 
 // hook для взаимодействия с товаром
-export function useProductQuantity({ product }: UseProductQuantityOptions) {
+export function useProduct({ product }: UseProductOptions) {
   const dispatch = useAppDispatch()
   const [quantity, setQuantity] = useState(1)
 
@@ -47,7 +47,9 @@ export function useProductQuantity({ product }: UseProductQuantityOptions) {
     quantity,
     offer,
     priceText,
+    category_uuid: product?.category_uuid,
     handleAddToBasket,
     handleQuantityChange,
   }
 }
+
