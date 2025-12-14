@@ -71,7 +71,7 @@ export function Catalog() {
       <div className="flex flex-1 gap-8 lg:flex-row flex-col">
         {/* Категории: на мобилке показываем только если категория не выбрана */}
         <div
-          className={`w-category-sidebar flex-shrink-0 lg:w-category-sidebar w-full ${
+          className={`max-w-categories flex-shrink-0 lg:max-w-categories w-full ${
             selectedCategory ? "hidden lg:block" : "block"
           }`}
         >

@@ -33,9 +33,7 @@ module.exports = {
       maxWidth: {
         container: '1440px',
         products: '1078px',
-      },
-      width: {
-        'category-sidebar': '353px',
+        categories: '353px',
       },
     },
   },
