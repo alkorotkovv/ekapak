@@ -1,7 +1,8 @@
-import { Product } from "@/pages/Product"
+import { Product } from "@/page-components/Product"
 import { fetchProduct } from "@/utils/api"
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query"
 import { QueryClient } from "@tanstack/react-query"
+import { Suspense } from "react"
 
 interface ProductPageProps {
   params: {
@@ -20,7 +21,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Product uuid={params.uuid} />
+      <Suspense fallback={<div className="py-8 text-center text-p text-gray">Загрузка...</div>}>
+        <Product uuid={params.uuid} />
+      </Suspense>
     </HydrationBoundary>
   )
 }

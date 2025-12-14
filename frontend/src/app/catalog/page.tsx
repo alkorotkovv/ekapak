@@ -1,7 +1,8 @@
-import { Catalog } from "@/pages/Catalog"
+import { Catalog } from "@/page-components/Catalog"
 import { fetchProducts } from "@/utils/api"
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query"
 import { QueryClient } from "@tanstack/react-query"
+import { Suspense } from "react"
 
 export default async function CatalogPage() {
   const queryClient = new QueryClient()
@@ -14,7 +15,9 @@ export default async function CatalogPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Catalog />
+      <Suspense fallback={<div className="py-8 text-center text-p text-gray">Загрузка...</div>}>
+        <Catalog />
+      </Suspense>
     </HydrationBoundary>
   )
 }
