@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useProducts } from "@/hooks/useProducts"
 import { Products } from "@/components/Products"
 import { Categories } from "@/components/Categories"
@@ -11,35 +11,23 @@ import { useAppSelector } from "@/store/hooks"
 
 const ITEMS_PER_PAGE = 8
 
-export function Catalog() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+interface CatalogProps {
+  categoryUuid?: string
+}
 
-  // Получаем категорию из URL и поисковый запрос из Redux
-  const selectedCategory = searchParams?.get("category") || undefined
+export function Catalog({ categoryUuid }: CatalogProps = {}) {
+  const searchParams = useSearchParams()
+
+  // Получаем поисковый запрос из Redux
   const searchQuery = useAppSelector(state => state.search.query)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const { data, isLoading, error } = useProducts(selectedCategory)
+  const { data, isLoading, error } = useProducts(categoryUuid)
 
   // Сбрасываем страницу при смене категории или поискового запроса
   useEffect(() => {
     setCurrentPage(1)
-  }, [selectedCategory, searchQuery])
-
-  const handleCategorySelect = (categoryUuid: string | undefined) => {
-    setCurrentPage(1)
-
-    // Обновляем URL - React Query автоматически сделает новый запрос при изменении queryKey
-    const params = new URLSearchParams(searchParams?.toString() || "")
-    if (categoryUuid) {
-      params.set("category", categoryUuid)
-    } else {
-      params.delete("category")
-    }
-    const newUrl = params.toString() ? `/catalog?${params.toString()}` : "/catalog"
-    router.push(newUrl, { scroll: false })
-  }
+  }, [categoryUuid, searchQuery])
 
   // Фильтруем товары по поисковому запросу (по названию без учета регистра)
   const filteredProducts = useMemo(() => {
@@ -66,20 +54,20 @@ export function Catalog() {
   return (
     <div className="flex flex-1 flex-col max-w-container mx-auto w-full">
       {/* Хлебные крошки над всем каталогом */}
-      <Breadcrumbs categoryUuid={selectedCategory} />
+      <Breadcrumbs categoryUuid={categoryUuid} />
 
       <div className="flex flex-1 gap-8 lg:flex-row flex-col">
         {/* Категории: на мобилке показываем только если категория не выбрана */}
         <div
           className={`w-full lg:w-full lg:max-w-categories flex-shrink-0 ${
-            selectedCategory ? "hidden lg:block" : "block"
+            categoryUuid ? "hidden lg:block" : "block"
           }`}
         >
-          <Categories selectedCategory={selectedCategory} onCategorySelect={handleCategorySelect} />
+          <Categories selectedCategory={categoryUuid} />
         </div>
 
         {/* Товары: на мобилке показываем только если категория выбрана */}
-        <main className={`flex-1 min-w-0 ${selectedCategory ? "block" : "hidden lg:block"}`}>
+        <main className={`flex-1 min-w-0 ${categoryUuid ? "block" : "hidden lg:block"}`}>
           {isLoading && <div className="py-8 text-center text-p text-gray">Загрузка...</div>}
 
           {error && (
@@ -92,7 +80,7 @@ export function Catalog() {
 
           {!isLoading && !error && filteredProducts.length > 0 && (
             <>
-              <Products products={paginatedProducts} selectedCategory={selectedCategory} />
+              <Products products={paginatedProducts} />
               <div className="my-8 flex flex-col items-center gap-4">
                 <Pagination
                   current={currentPage}

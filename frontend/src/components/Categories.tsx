@@ -1,14 +1,14 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useCategories } from "@/hooks/useCategories"
 
 interface CategoriesProps {
   selectedCategory?: string
-  onCategorySelect: (categoryUuid: string | undefined) => void
 }
 
-export function Categories({ selectedCategory, onCategorySelect }: CategoriesProps) {
+export function Categories({ selectedCategory }: CategoriesProps) {
   const { data, isLoading, error } = useCategories()
 
   if (isLoading)
@@ -31,10 +31,11 @@ export function Categories({ selectedCategory, onCategorySelect }: CategoriesPro
       <div className="flex flex-col">
         {data.map((category, index) => {
           const isSelected = selectedCategory === category.uuid
+          const categoryUrl = `/catalog/${category.uuid}`
           return (
             <div key={category.uuid}>
-              <button
-                onClick={() => onCategorySelect(category.uuid)}
+              <Link
+                href={categoryUrl}
                 className={`w-full flex items-center justify-between px-6 py-4 text-left text-sm text-black transition-colors ${
                   isSelected
                     ? "bg-blue bg-opacity-10 text-blue font-medium"
@@ -49,7 +50,7 @@ export function Categories({ selectedCategory, onCategorySelect }: CategoriesPro
                   height={24}
                   className="flex-shrink-0"
                 />
-              </button>
+              </Link>
             </div>
           )
         })}

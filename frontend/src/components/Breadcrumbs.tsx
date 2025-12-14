@@ -21,7 +21,7 @@ export function Breadcrumbs({ categoryUuid, pageName }: BreadcrumbsProps) {
     { title: "Каталог", href: "/catalog", show: !isBasketPage },
     {
       title: category?.name || "",
-      href: `/catalog?category=${categoryUuid}`,
+      href: categoryUuid ? `/catalog/${categoryUuid}` : "/catalog",
       show: !!category,
     },
     { title: pageName || "", href: "#", show: !!pageName },
