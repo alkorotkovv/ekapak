@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import Image from "next/image"
-import { useAppSelector, useAppDispatch } from "@/store/hooks"
-import { setSearchQuery } from "@/store/slices/searchSlice"
 import { debounce } from "@/utils/debounce"
 
 interface HeaderSearchProps {
@@ -11,21 +10,39 @@ interface HeaderSearchProps {
 }
 
 export function HeaderSearch({ variant }: HeaderSearchProps) {
-  const dispatch = useAppDispatch()
-  const searchQuery = useAppSelector(state => state.search.query)
-  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery)
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
-  const debouncedSetSearchQueryRef = useRef(
-    debounce((query: string) => dispatch(setSearchQuery(query)), 300)
-  )
+  // Получаем поисковый запрос из URL
+  const urlSearchQuery = searchParams.get("search") || ""
+  const [localSearchQuery, setLocalSearchQuery] = useState(urlSearchQuery)
 
+  // Синхронизируем локальное состояние с URL при изменении
   useEffect(() => {
-    setLocalSearchQuery(searchQuery)
-  }, [searchQuery])
+    setLocalSearchQuery(urlSearchQuery)
+  }, [urlSearchQuery])
+
+  const debouncedUpdateUrlRef = useRef(
+    debounce((query: string) => {
+      // Обновляем URL напрямую
+      const params = new URLSearchParams(searchParams.toString())
+      if (query.trim()) {
+        params.set("search", query.trim())
+        // Сбрасываем страницу при поиске
+        params.delete("page")
+      } else {
+        params.delete("search")
+      }
+
+      const newUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname
+      router.push(newUrl)
+    }, 300)
+  )
 
   const handleSearchChange = (value: string) => {
     setLocalSearchQuery(value)
-    debouncedSetSearchQueryRef.current(value)
+    debouncedUpdateUrlRef.current(value)
   }
 
   const wrapperClassName = variant === "mobile" ? "w-full" : "flex-1 max-w-2xl"

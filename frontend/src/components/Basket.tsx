@@ -5,7 +5,7 @@ import { removeFromBasket, updateQuantity } from "@/store/slices/basketSlice"
 import Image from "next/image"
 import Link from "next/link"
 import { formatPrice } from "@/utils/price"
-import { ProductActions } from "../ProductActions"
+import { ProductActions } from "./product/ProductActions"
 
 export function Basket() {
   const basketItems = useAppSelector(state => state.basket.items)

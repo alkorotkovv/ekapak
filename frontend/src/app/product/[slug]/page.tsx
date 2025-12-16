@@ -1,6 +1,6 @@
 import { fetchProduct } from "@/utils/api"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
-import { ProductDetails } from "@/components/ProductDetails"
+import { ProductDetails } from "@/components/product/ProductDetails"
 import { REVALIDATE_PRODUCTS } from "@/utils/constants"
 
 export const revalidate = REVALIDATE_PRODUCTS

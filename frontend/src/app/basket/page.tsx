@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs"
-import { Basket } from "@/components/basket/Basket"
+import { Basket } from "@/components/Basket"
 
 export default function BasketPage() {
   return (
