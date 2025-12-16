@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { Suspense } from "react"
 import { HeaderSearch } from "./HeaderSearch"
 import { HeaderBasketIcon } from "./HeaderBasketIcon"
 
@@ -84,7 +85,9 @@ export function Header() {
             </div>
 
             {/* Нижняя строка: поиск */}
-            <HeaderSearch variant="mobile" />
+            <Suspense fallback={null}>
+              <HeaderSearch variant="mobile" />
+            </Suspense>
           </div>
 
           {/* Десктопная версия */}
@@ -104,7 +107,9 @@ export function Header() {
             </Link>
 
             {/* Поиск по центру */}
-            <HeaderSearch variant="desktop" />
+            <Suspense fallback={null}>
+              <HeaderSearch variant="desktop" />
+            </Suspense>
 
             {/* Иконки пользователя, избранного и корзины */}
             <div className="hidden lg:flex items-center gap-6 flex-shrink-0 h-20">

@@ -1,7 +1,7 @@
 "use client"
 
 import { useAppSelector, useAppDispatch } from "@/store/hooks"
-import { removeFromBasket, updateQuantity } from "@/store/slices/basketSlice"
+import { removeFromBasket } from "@/store/slices/basketSlice"
 import Image from "next/image"
 import Link from "next/link"
 import { formatPrice } from "@/utils/price"

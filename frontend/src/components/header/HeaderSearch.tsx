@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, Suspense } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { debounce } from "@/utils/debounce"
@@ -56,21 +56,19 @@ export function HeaderSearch({ variant }: HeaderSearchProps) {
       : "absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"
 
   return (
-    <Suspense fallback={null}>
-      <div className={wrapperClassName}>
-        <div className="relative">
-          <input
-            type="text"
-            value={localSearchQuery}
-            onChange={e => handleSearchChange(e.target.value)}
-            placeholder="Поиск"
-            className={inputClassName}
-          />
-          <div className={iconWrapperClassName}>
-            <Image src="/icons/search.png" alt="Search" width={20} height={20} />
-          </div>
+    <div className={wrapperClassName}>
+      <div className="relative">
+        <input
+          type="text"
+          value={localSearchQuery}
+          onChange={e => handleSearchChange(e.target.value)}
+          placeholder="Поиск"
+          className={inputClassName}
+        />
+        <div className={iconWrapperClassName}>
+          <Image src="/icons/search.png" alt="Search" width={20} height={20} />
         </div>
       </div>
-    </Suspense>
+    </div>
   )
 }
