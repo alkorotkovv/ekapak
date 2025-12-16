@@ -1,31 +1,22 @@
-// components/ui/Breadcrumbs.tsx - версия без иконок
-"use client"
-
 import Link from "next/link"
-import { useCategoriesQuery } from "@/hooks/useCategories"
 
-interface BreadcrumbsProps {
-  categorySlug?: string
-  pageName?: string
+interface Crumb {
+  title: string
+  href?: string
 }
 
-export function Breadcrumbs({ categorySlug, pageName }: BreadcrumbsProps) {
-  const { data: categories } = useCategoriesQuery()
-  const category = categorySlug ? categories?.find(cat => cat.slug === categorySlug) : null
-  const isBasketPage = pageName === "Корзина"
+interface BreadcrumbsProps {
+  items: Crumb[]
+}
 
-  const items = [
-    { title: "Главная", href: "/" },
-    ...(!isBasketPage ? [{ title: "Каталог", href: "/catalog" }] : []),
-    ...(category ? [{ title: category.name, href: `/catalog/${category.slug}` }] : []),
-    ...(pageName ? [{ title: pageName, href: "#" }] : []),
-  ].filter(Boolean)
-
+// Серверный компонент хлебных крошек.
+// Не использует хуки и не делает запросов — просто рендерит переданные элементы.
+export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
     <nav className="text-xs lg:text-sm my-1 mx-4 flex items-center flex-wrap gap-1">
       {items.map((item, index) => (
         <div key={index} className="flex items-center">
-          {item.href !== "#" ? (
+          {item.href ? (
             <>
               <Link href={item.href} className="text-blue-600 hover:text-blue-800 hover:underline">
                 {item.title}

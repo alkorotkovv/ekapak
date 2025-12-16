@@ -1,5 +1,5 @@
 import { Providers } from "@/components/Providers"
-import { Header } from "@/components/Header"
+import { Header } from "@/components/header/Header"
 import type { Metadata } from "next"
 import { Manrope } from "next/font/google"
 import "./globals.css"

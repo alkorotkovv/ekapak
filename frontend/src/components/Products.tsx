@@ -5,10 +5,10 @@ import { ProductCard } from "./ProductCard"
 
 interface ProductsProps {
   products: Product[]
-  selectedCategory?: string
+  selectedCategorySlug?: string
 }
 
-export function Products({ products, selectedCategory }: ProductsProps) {
+export function Products({ products, selectedCategorySlug }: ProductsProps) {
   if (!products.length) {
     return <div className="py-12 text-center text-p text-gray">Товары не найдены</div>
   }
@@ -17,7 +17,11 @@ export function Products({ products, selectedCategory }: ProductsProps) {
     <div className="max-w-products mx-auto">
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-[10px]">
         {products.map(product => (
-          <ProductCard key={product.uuid} product={product} selectedCategory={selectedCategory} />
+          <ProductCard
+            key={product.uuid}
+            product={product}
+            selectedCategory={selectedCategorySlug}
+          />
         ))}
       </div>
     </div>

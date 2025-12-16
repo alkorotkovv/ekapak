@@ -1,36 +1,9 @@
-"use client"
-
-import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useAppSelector, useAppDispatch } from "@/store/hooks"
-import { setSearchQuery } from "@/store/slices/searchSlice"
-import { debounce } from "@/utils/debounce"
+import { HeaderSearch } from "./HeaderSearch"
+import { HeaderCartIcon } from "./HeaderCartIcon"
 
 export function Header() {
-  const dispatch = useAppDispatch()
-  const searchQuery = useAppSelector(state => state.search.query)
-  // Локальное состояние для инпута (для отзывчивости UI)
-  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery)
-  const basketItemsCount = useAppSelector(state =>
-    state.basket.items.reduce((sum, item) => sum + item.quantity, 0)
-  )
-
-  // Создаем debounced функцию один раз через useRef
-  const debouncedSetSearchQueryRef = useRef(
-    debounce((query: string) => dispatch(setSearchQuery(query)), 300)
-  )
-
-  // Синхронизируем локальное состояние с Redux при изменении извне
-  useEffect(() => {
-    setLocalSearchQuery(searchQuery)
-  }, [searchQuery])
-
-  const handleSearchChange = (value: string) => {
-    setLocalSearchQuery(value)
-    debouncedSetSearchQueryRef.current(value)
-  }
-
   return (
     <header className="bg-white max-w-container mx-2 w-[calc(100%-1rem)] lg:w-full my-5 rounded-lg">
       {/* Верхняя секция с контактами - скрыта на мобилке */}
@@ -104,35 +77,12 @@ export function Header() {
                   <Image src="/icons/hamburger.png" alt="Menu" width={16} height={16} />
                 </Link>
 
-                <Link
-                  href="/basket"
-                  className="flex items-center justify-center relative flex-shrink-0"
-                >
-                  <Image src="/icons/basket.png" alt="Basket" width={20} height={18} />
-                  {basketItemsCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-blue text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                      {basketItemsCount > 99 ? "99+" : basketItemsCount}
-                    </span>
-                  )}
-                </Link>
+                <HeaderCartIcon variant="mobile" />
               </div>
             </div>
 
             {/* Нижняя строка: поиск */}
-            <div className="w-full">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={localSearchQuery}
-                  onChange={e => handleSearchChange(e.target.value)}
-                  placeholder="Поиск"
-                  className="w-full px-4 py-2.5 pl-10 pr-4 border border-lightgray rounded-lg focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent text-sm"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <Image src="/icons/search.png" alt="Search" width={20} height={20} />
-                </div>
-              </div>
-            </div>
+            <HeaderSearch variant="mobile" />
           </div>
 
           {/* Десктопная версия */}
@@ -152,20 +102,7 @@ export function Header() {
             </Link>
 
             {/* Поиск по центру */}
-            <div className="flex-1 max-w-2xl">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={localSearchQuery}
-                  onChange={e => handleSearchChange(e.target.value)}
-                  placeholder="Поиск"
-                  className="w-full px-4 py-3 pl-12 pr-4 border border-lightgray rounded-lg focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent text-sm"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                  <Image src="/icons/search.png" alt="Search" width={20} height={20} />
-                </div>
-              </div>
-            </div>
+            <HeaderSearch variant="desktop" />
 
             {/* Иконки пользователя, избранного и корзины */}
             <div className="hidden lg:flex items-center gap-6 flex-shrink-0 h-20">
@@ -181,20 +118,7 @@ export function Header() {
                 <span className="text-xs text-black">Избранное</span>
               </button>
 
-              <Link
-                href="/basket"
-                className="flex flex-col items-center justify-between h-10 hover:opacity-70 transition-opacity relative"
-              >
-                <div className="relative">
-                  <Image src="/icons/basket.png" alt="Basket" width={17} height={15} />
-                  {basketItemsCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-blue text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                      {basketItemsCount > 99 ? "99+" : basketItemsCount}
-                    </span>
-                  )}
-                </div>
-                <span className="text-xs text-black">Корзина</span>
-              </Link>
+              <HeaderCartIcon variant="desktop" />
             </div>
 
             {/* Кнопка "Заказать образец" */}
