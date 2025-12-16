@@ -1,8 +1,5 @@
 import { Product, Category, ProductsResponse, CategoriesResponse } from "@/types"
-
-// Базовый URL API
-// Эти функции используются на сервере (SSR prefetch) и на клиенте (через hooks)
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.ekapak.ru/api"
+import { API_BASE_URL, REVALIDATE_PRODUCTS, REVALIDATE_CATEGORIES } from "@/utils/constants"
 
 /**
  * Получение списка товаров
@@ -12,7 +9,7 @@ export const fetchProducts = async (categoryUuid?: string): Promise<Product[]> =
     ? `${API_BASE_URL}/products?category=${categoryUuid}`
     : `${API_BASE_URL}/products`
   const response = await fetch(url, {
-    next: { revalidate: 60 },
+    next: { revalidate: REVALIDATE_PRODUCTS },
   })
   if (!response.ok) {
     throw new Error("Ошибка при получении товаров: " + categoryUuid ? categoryUuid : "Всех")
@@ -26,7 +23,7 @@ export const fetchProducts = async (categoryUuid?: string): Promise<Product[]> =
  */
 export const fetchProduct = async (slug: string): Promise<Product> => {
   const response = await fetch(`${API_BASE_URL}/products/slug/${slug}`, {
-    next: { revalidate: 60 },
+    next: { revalidate: REVALIDATE_PRODUCTS },
   })
   if (!response.ok) {
     throw new Error("Ошибка при получении товара: " + slug)
@@ -40,7 +37,7 @@ export const fetchProduct = async (slug: string): Promise<Product> => {
  */
 export const fetchCategories = async (): Promise<Category[]> => {
   const response = await fetch(`${API_BASE_URL}/categories`, {
-    next: { revalidate: 300 },
+    next: { revalidate: REVALIDATE_CATEGORIES },
   })
   if (!response.ok) {
     throw new Error("Ошибка при получении категорий")

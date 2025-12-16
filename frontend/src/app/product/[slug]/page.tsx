@@ -1,8 +1,9 @@
 import { fetchProduct } from "@/utils/api"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { ProductDetails } from "@/components/ProductDetails"
+import { REVALIDATE_PRODUCTS } from "@/utils/constants"
 
-export const revalidate = 60
+export const revalidate = REVALIDATE_PRODUCTS
 
 interface ProductPageProps {
   params: {
