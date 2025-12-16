@@ -12,12 +12,6 @@ export default function NotFound() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/catalog"
-              className="px-6 py-3 bg-blue text-white rounded-lg hover:bg-lightblue transition-colors text-sm lg:text-base font-medium"
-            >
-              Перейти в каталог
-            </Link>
-            <Link
               href="/"
               className="px-6 py-3 bg-lightgray bg-opacity-30 text-black rounded-lg hover:bg-opacity-40 transition-colors text-sm lg:text-base font-medium"
             >

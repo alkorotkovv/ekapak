@@ -4,8 +4,8 @@ import { useAppSelector, useAppDispatch } from "@/store/hooks"
 import { removeFromBasket, updateQuantity } from "@/store/slices/basketSlice"
 import Image from "next/image"
 import Link from "next/link"
-import { QuantitySelector } from "@/components/QuantitySelector"
 import { formatPrice } from "@/utils/price"
+import { ProductActions } from "../ProductActions"
 
 export function Basket() {
   const basketItems = useAppSelector(state => state.basket.items)
@@ -14,10 +14,6 @@ export function Basket() {
 
   const handleRemove = (productUuid: string) => {
     dispatch(removeFromBasket({ productUuid }))
-  }
-
-  const handleQuantityChange = (productUuid: string, newQuantity: number) => {
-    dispatch(updateQuantity({ productUuid, quantity: newQuantity }))
   }
 
   const handleCreateOrder = () => {
@@ -145,15 +141,7 @@ export function Basket() {
               <div className="flex items-center justify-between gap-3 lg:contents">
                 {/* Поле количества */}
                 <div className="flex-shrink-0 lg:flex-shrink-0">
-                  <QuantitySelector
-                    price={offer.price}
-                    currency={offer.currency}
-                    unit={offer.unit}
-                    quantity={item.quantity}
-                    onQuantityChange={delta =>
-                      handleQuantityChange(item.product.uuid, item.quantity + delta)
-                    }
-                  />
+                  <ProductActions product={item.product} isInBasket={true} />
                 </div>
 
                 {/* Цена */}

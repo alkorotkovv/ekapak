@@ -20,7 +20,7 @@ export default async function CatalogPage({ params }: CatalogPageProps) {
   const category = categorySlug ? categories.find(cat => cat.slug === categorySlug) : null
   const categoryUuid = category?.uuid
 
-  // Нативная загрузка на сервере по uuid (API требует uuid)
+  // Загрузка по uuid (API требует uuid)
   const products = await fetchProducts(categoryUuid)
 
   return (

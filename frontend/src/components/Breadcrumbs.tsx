@@ -9,8 +9,7 @@ interface BreadcrumbsProps {
   items: Crumb[]
 }
 
-// Серверный компонент хлебных крошек.
-// Не использует хуки и не делает запросов — просто рендерит переданные элементы.
+// Компонент хлебных крошек
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
     <nav className="text-xs lg:text-sm my-1 mx-4 flex items-center flex-wrap gap-1">

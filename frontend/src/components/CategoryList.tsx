@@ -7,6 +7,7 @@ interface CategoryListProps {
   selectedCategorySlug?: string
 }
 
+// Компонент для каталога категорий
 export function CategoryList({ categories, selectedCategorySlug }: CategoryListProps) {
   return (
     <div
