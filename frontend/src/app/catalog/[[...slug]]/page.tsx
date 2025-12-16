@@ -5,6 +5,7 @@ import { CategoryList } from "@/components/CategoryList"
 import { Pagination } from "@/components/Pagination"
 import { ITEMS_PER_PAGE, REVALIDATE_PRODUCTS } from "@/utils/constants"
 import { filterProducts } from "@/utils/search"
+import { Suspense } from "react"
 
 export const revalidate = REVALIDATE_PRODUCTS
 
@@ -56,9 +57,11 @@ export default async function CatalogPage({ params, searchParams }: CatalogPageP
 
       <div className="flex flex-1 gap-8 lg:flex-row flex-col">
         <CategoryList categories={categories} selectedCategorySlug={categorySlug} />
-        <div className="flex-1 min-w-0">
+        <div className={`flex-1 min-w-0 ${categorySlug ? "block" : "hidden lg:block"}`}>
           <ProductList products={products} selectedCategorySlug={categorySlug} />
-          <Pagination currentPage={currentPage} totalPages={totalPages} />
+          <Suspense fallback={null}>
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
+          </Suspense>
         </div>
       </div>
     </div>

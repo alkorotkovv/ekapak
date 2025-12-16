@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { HeaderSearch } from "./HeaderSearch"
-import { HeaderCartIcon } from "./HeaderCartIcon"
+import { HeaderBasketIcon } from "./HeaderBasketIcon"
 
 export function Header() {
   return (
@@ -72,12 +72,14 @@ export function Header() {
               <div className="flex items-center gap-3">
                 <Link
                   href="/catalog"
-                  className="flex items-center justify-center bg-lightgray bg-opacity-30 rounded-lg hover:bg-opacity-40 transition-colors flex-shrink-0"
+                  className="flex items-center justify-center w-10 h-10 bg-lightgray bg-opacity-30 rounded-lg hover:bg-opacity-40 transition-colors flex-shrink-0"
                 >
-                  <Image src="/icons/hamburger.png" alt="Menu" width={16} height={16} />
+                  <Image src="/icons/hamburger.png" alt="Menu" width={20} height={20} />
                 </Link>
 
-                <HeaderCartIcon variant="mobile" />
+                <div className="flex items-center justify-center w-10 h-10 flex-shrink-0">
+                  <HeaderBasketIcon />
+                </div>
               </div>
             </div>
 
@@ -118,7 +120,7 @@ export function Header() {
                 <span className="text-xs text-black">Избранное</span>
               </button>
 
-              <HeaderCartIcon variant="desktop" />
+              <HeaderBasketIcon />
             </div>
 
             {/* Кнопка "Заказать образец" */}
