@@ -2,30 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProcessPaymentRequest;
+use App\Http\Requests\ShowPaymentRequest;
+use App\Http\Requests\StorePaymentRequest;
 use App\Models\Payment;
 use App\Models\PaymentLog;
-use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
     /**
      * Создание нового платежа
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StorePaymentRequest $request)
     {
-        // Валидация будет добавлена позже
-        // Пока получаем данные напрямую
-        $amount = $request->input('amount');
-        $currency = $request->input('currency');
+        // Получаем валидированные данные
+        $validated = $request->validated();
 
         // Создаем платеж со статусом 'pending' (по умолчанию)
         // UUID сгенерируется автоматически в модели
         $payment = Payment::create([
-            'amount' => $amount,
-            'currency' => $currency,
+            'amount' => $validated['amount'],
+            'currency' => $validated['currency'],
             'status' => Payment::STATUS_PENDING,
         ]);
 
@@ -37,12 +34,10 @@ class PaymentController extends Controller
 
     /**
      * Получение информации о платеже по UUID
-     * 
-     * @param string $uuid
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(string $uuid)
+    public function show(ShowPaymentRequest $request, string $uuid)
     {
+        // UUID уже валидирован через ShowPaymentRequest
         // Находим платеж по uuid
         $payment = Payment::where('uuid', $uuid)->first();
 
@@ -66,13 +61,13 @@ class PaymentController extends Controller
 
     /**
      * Обработка платежа (симуляция успеха или неудачи)
-     * 
-     * @param Request $request
-     * @param string $uuid
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function process(Request $request, string $uuid)
+    public function process(ProcessPaymentRequest $request, string $uuid)
     {
+        // UUID и success уже валидированы через ProcessPaymentRequest
+        // Получаем валидированные данные
+        $validated = $request->validated();
+        
         // Находим платеж по uuid
         $payment = Payment::where('uuid', $uuid)->first();
 
@@ -90,8 +85,8 @@ class PaymentController extends Controller
             ], 400);
         }
 
-        // Получаем параметр success (валидация будет добавлена позже)
-        $success = $request->input('success');
+        // Получаем параметр success из валидированных данных
+        $success = $validated['success'];
 
         // Обновляем статус в зависимости от параметра success
         $payment->status = $success 
