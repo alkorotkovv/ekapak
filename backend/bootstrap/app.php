@@ -10,7 +10,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Rate limiting применяется индивидуально к каждому роуту
+        // через middleware в routes/api.php
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Для API-роутов всегда возвращаем JSON при ошибках валидации
@@ -23,6 +24,15 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'message' => $firstError,
                 ], 422);
+            }
+        });
+
+        // Для API-роутов возвращаем JSON при превышении rate limit
+        $exceptions->render(function (\Illuminate\Http\Exceptions\ThrottleRequestsException $e, \Illuminate\Http\Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Превышен лимит запросов. Попробуйте позже.',
+                ], 429);
             }
         });
     })->create();
