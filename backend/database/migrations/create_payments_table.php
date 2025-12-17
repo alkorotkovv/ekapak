@@ -17,9 +17,6 @@ return new class extends Migration
             $table->string('currency', 3);
             $table->string('status', 20)->default('pending');
             $table->timestamps();
-            
-            // Индексы для быстрого поиска
-            $table->index('status');
         });
     }
 
